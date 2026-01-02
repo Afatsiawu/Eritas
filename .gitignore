@@ -1,0 +1,22 @@
+# Node dependencies
+node_modules/
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.log
+
+# Environment files
+.env
+.env.local
+
+# Database
+*.sqlite
+*.sqlite-journal
+
+# OS files
+.DS_Store
+Thumbs.db
