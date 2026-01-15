@@ -1,0 +1,40 @@
+{
+  "placeholderImages": [
+    {
+      "id": "driver-photo",
+      "description": "A portrait of a friendly bus driver.",
+      "imageUrl": "https://images.unsplash.com/photo-1615039704129-a5a4cfbb3594?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkcml2ZXIlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjU1OTE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "driver portrait"
+    },
+    {
+      "id": "live-trip-map",
+      "description": "A map showing a route through a city.",
+      "imageUrl": "https://images.unsplash.com/photo-1476385822777-70eabacbd41f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjaXR5JTIwbWFwfGVufDB8fHx8MTc2NTUzNjE1NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city map"
+    },
+    {
+      "id": "album-art",
+      "description": "Album artwork for a music track.",
+      "imageUrl": "https://images.unsplash.com/photo-1587731556938-38755b4803a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGFsYnVtfGVufDB8fHx8fDE3NjU1OTE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music album"
+    },
+    {
+      "id": "playlist-album-art-1",
+      "description": "Album artwork for a song in the passenger playlist.",
+      "imageUrl": "https://images.unsplash.com/photo-1620712943543-959929999650?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhZnJvYmVhdHMlMjBhbGJ1bXxlbnwwfHx8fDE3NjU5OTE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "afrobeats album"
+    },
+    {
+      "id": "playlist-album-art-2",
+      "description": "Album artwork for a song in the passenger playlist.",
+      "imageUrl": "https://images.unsplash.com/photo-1619983081563-436f63e0cd24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGNvdmVyfGVufDB8fHx8fDE3NjU5OTE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music cover"
+    },
+    {
+      "id": "playlist-album-art-3",
+      "description": "Album artwork for a song in the passenger playlist.",
+      "imageUrl": "https://images.unsplash.com/photo-1511379938547-c1f69419868d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMHBsYXlsaXN0fGVufDB8fHx8fDE3NjU5OTE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music playlist"
+    }
+  ]
+}

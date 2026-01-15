@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "driver": {
+      "title": "Driver",
+      "description": "A driver registered in the system.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The Firebase Authentication user ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The driver's full name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The driver's email address."
+        },
+        "busPlate": {
+          "type": "string",
+          "description": "The license plate of the bus assigned to the driver."
+        },
+        "busModel": {
+          "type": "string",
+          "description": "The model of the bus."
+        },
+        "seatCapacity": {
+          "type": "number",
+          "description": "The number of seats on the bus."
+        },
+        "route": {
+          "type": "string",
+          "description": "The assigned route for the driver."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the driver was created."
+        }
+      },
+      "required": ["uid", "name", "email"]
+    },
+    "enrollmentCode": {
+      "title": "Enrollment Code",
+      "description": "A one-time code for driver registration.",
+      "type": "object",
+      "properties": {
+        "driverId": {
+          "type": "string",
+          "description": "The ID of the driver this code is for."
+        },
+        "used": {
+          "type": "boolean",
+          "description": "Whether the code has been used."
+        },
+        "usedBy": {
+          "type": "string",
+          "description": "The UID of the user who used the code."
+        },
+        "usedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the code was used."
+        }
+      },
+      "required": ["driverId", "used"]
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "/drivers/{driverId}": {
+      "schema": { "$ref": "#/entities/driver" },
+      "description": "Stores driver profile information."
+    },
+    "/enrollmentCodes/{codeId}": {
+      "schema": { "$ref": "#/entities/enrollmentCode" },
+      "description": "Stores one-time enrollment codes for drivers."
+    }
+  }
+}

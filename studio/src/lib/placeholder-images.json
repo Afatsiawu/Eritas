@@ -1,0 +1,112 @@
+{
+  "placeholderImages": [
+    {
+      "id": "bus-side-view",
+      "description": "A green bus on a road through mountains",
+      "imageUrl": "https://images.unsplash.com/photo-1570125909517-53cb21c89ff2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXMlMjB0cmF2ZWx8ZW58MHx8fHwxNzYyNjI3NTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bus travel"
+    },
+    {
+      "id": "smart-routing",
+      "description": "A winding road through a forest, representing smart routing.",
+      "imageUrl": "https://images.unsplash.com/photo-1489641024260-20e5cb3ee4aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5kaW5nJTIwcm9hZHxlbnwwfHx8fDE3NjI2NTE1NDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "winding road"
+    },
+    {
+      "id": "gps-tracking",
+      "description": "A map with a pin on it, representing GPS tracking.",
+      "imageUrl": "https://images.unsplash.com/photo-1532154066703-3973764c81fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYXAlMjBsb2NhdGlvbnxlbnwwfHx8fDE3NjI1ODc4OTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map location"
+    },
+    {
+      "id": "personal-music",
+      "description": "A person wearing headphones and enjoying music.",
+      "imageUrl": "https://images.unsplash.com/photo-1617714313606-283484c136be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwZXJzb24lMjBoZWFkcGhvbmVzfGVufDB8fHx8MTc2MjY0MTUyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person headphones"
+    },
+    {
+      "id": "real-time-availability",
+      "description": "A digital display showing bus schedules.",
+      "imageUrl": "https://images.unsplash.com/photo-1759661937582-0ccd5dacf20f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxiKaWdpdGFsJTIwc2NoZWR1bGV8ZW58MHx8fHwxNzYyNjA2ODYyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital schedule"
+    },
+    {
+      "id": "frosted-glass-ui",
+      "description": "An abstract image with a frosted glass effect.",
+      "imageUrl": "https://img.freepik.com/premium-vector/template-glass-morphism-style-frosted-glass-screen-with-blurry-floating-green-spheres_206325-2919.jpg",
+      "imageHint": "abstract frosted"
+    },
+    {
+      "id": "accra-map",
+      "description": "A stylized map of Accra, Ghana, showing a bus route.",
+      "imageUrl": "https://images.unsplash.com/photo-1622372738946-62e025315332?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXAlMjBvZiUyMGFjY3JhJTIwZ2hhbmF8ZW58MHx8fHwxNzYyODExNzM3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "accra ghana map"
+    },
+    {
+      "id": "map-route",
+      "description": "A map showing a route from one point to another.",
+      "imageUrl": "https://images.unsplash.com/photo-1613943343362-d7b3ae55c170?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtYXAlMjByb3V0ZXxlbnwwfHx8fDE3NjM0NTUwMDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map route"
+    },
+    {
+      "id": "user-avatar",
+      "description": "An avatar of a person.",
+      "imageUrl": "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXNlciUyMGF2YXRhcnxlbnwwfHx8fDE3NjI2MzIyNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "user avatar"
+    },
+    {
+      "id": "eritas-logo",
+      "description": "The Eritas company logo.",
+      "imageUrl": "/eritas-logo.png",
+      "imageHint": "company logo"
+    },
+    {
+      "id": "music-art-1",
+      "description": "A highlife guitarist on a Ghanaian beach.",
+      "imageUrl": "https://img.freepik.com/premium-psd/highlife-guitarist-ghanaian-beach-with-fishing-boats-vector-illustration-music-poster-idea_1020495-438011.jpg",
+      "imageHint": "highlife guitarist"
+    },
+    {
+      "id": "music-art-2",
+      "description": "Hiphop street style dancers.",
+      "imageUrl": "https://img.freepik.com/premium-photo/dynamic-hiphop-street-style-with-fashionable-young-dancers_151355-90820.jpg?semt=ais_se_enriched&w=740&q=80",
+      "imageHint": "hiphop dancers"
+    },
+    {
+      "id": "music-art-3",
+      "description": "Vibrant afrobeat fusion artwork.",
+      "imageUrl": "https://img.freepik.com/premium-photo/vibrant-afrobeat-fusion-colorful-silhouette-tshirt-design_931866-39048.jpg",
+      "imageHint": "vibrant afrobeat"
+    },
+    {
+      "id": "music-art-4",
+      "description": "A singer performing at a concert with lights.",
+      "imageUrl": "https://img.freepik.com/free-photo/dancing-concert-while-singer-is-performing-surrounded-with-lights_181624-22022.jpg?semt=ais_hybrid&w=740&q=80",
+      "imageHint": "gospel concert"
+    },
+    {
+      "id": "artist-sarkodie",
+      "description": "Image of the artist Sarkodie.",
+      "imageUrl": "https://i.scdn.co/image/ab6761610000e5eb8b809ac2ea8b54869eb9b977",
+      "imageHint": "male artist"
+    },
+    {
+      "id": "artist-stonebwoy",
+      "description": "Image of the artist Stonebwoy.",
+      "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebf8541a4f3743c79c88a5563c",
+      "imageHint": "male artist"
+    },
+    {
+      "id": "artist-shatta-wale",
+      "description": "Image of the artist Shatta Wale.",
+      "imageUrl": "https://i.scdn.co/image/ab6761610000e5eb6c433367b6604a3e2646c243",
+      "imageHint": "male artist"
+    },
+    {
+      "id": "artist-el",
+      "description": "Image of the artist E.L.",
+      "imageUrl": "https://i.scdn.co/image/ab6761610000e5ebe6b8026d246c4349da8b6151",
+      "imageHint": "male artist"
+    }
+  ]
+}
