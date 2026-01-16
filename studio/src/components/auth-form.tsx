@@ -23,6 +23,7 @@ import { useLanguage } from '@/context/language-context';
 
 import { useUser } from '@/context/user-context';
 import { GoogleAuthVisualizer } from './google-auth-visualizer';
+import { API_BASE_URL } from '@/lib/api-config';
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
@@ -80,53 +81,94 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
     }
   };
 
-  // Mock sign-in function
+  // Real sign-in function calling backend
   const handleSignIn = async (values: z.infer<typeof signInSchema>) => {
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-
-      // Update User Context with data from form
-      const nameFromEmail = values.email.split('@')[0];
-      const displayName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
-
-      loginWithGoogle({
-        uid: 'email-user-' + Date.now(),
-        displayName: displayName,
-        email: values.email,
-        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000' // Better default avatar
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
       });
 
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast({
+          variant: 'destructive',
+          title: 'Login Failed',
+          description: data.message || 'Invalid username or password',
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Update User Context with data from backend
+      loginWithGoogle({
+        uid: String(data.user.id),
+        displayName: data.user.name || data.user.email.split('@')[0],
+        email: data.user.email,
+        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000'
+      });
+
+      setIsLoading(false);
       toast({
         title: t('signInSuccessfulToastTitle'),
         description: t('signInSuccessfulToastDescription'),
       });
       onSignInSuccess();
-    }, 1000);
+    } catch (error) {
+      setIsLoading(false);
+      toast({
+        variant: 'destructive',
+        title: 'Connection Error',
+        description: 'Could not connect to the authentication server.',
+      });
+    }
   };
 
-  // Mock sign-up function
+  // Real sign-up function calling backend
   const handleSignUp = async (values: z.infer<typeof signUpSchema>) => {
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-
-      // Update User Context with data from form
-      loginWithGoogle({
-        uid: 'email-user-' + Date.now(),
-        displayName: `${values.firstName} ${values.lastName}`,
-        email: values.email,
-        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000'
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          name: `${values.firstName} ${values.lastName}`,
+          role: 'passenger'
+        }),
       });
 
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast({
+          variant: 'destructive',
+          title: 'Sign Up Failed',
+          description: data.message || 'Could not create account',
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
       toast({
         title: t('signUpSuccessfulToastTitle'),
-        description: t('signUpSuccessfulToastDescription'),
+        description: 'Account created successfully! Please log in.',
       });
+
       onSignUpSuccess();
-    }, 1000);
+    } catch (error) {
+      setIsLoading(false);
+      toast({
+        variant: 'destructive',
+        title: 'Connection Error',
+        description: 'Could not connect to the authentication server.',
+      });
+    }
   };
 
   // Social sign-in triggered

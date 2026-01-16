@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
-import { User } from "../entities/User";
+import { User, UserRole } from "../entities/User";
 import * as bcrypt from "bcrypt";
 
 export class AuthController {
@@ -18,8 +18,11 @@ export class AuthController {
             const user = new User();
             user.email = email;
 
-            user.password = password;
-            user.role = role || "passenger";
+            // Hash password before saving
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+
+            user.role = role || UserRole.PASSENGER;
             user.name = name;
 
             await userRepository.save(user);
@@ -37,14 +40,14 @@ export class AuthController {
         try {
             const user = await userRepository.findOne({ where: { email } });
             if (!user) {
-                return res.status(401).json({ message: "Invalid credentials" });
+                return res.status(401).json({ message: "Invalid username or password" });
             }
 
 
-            const valid = user.password === password;
+            const valid = await bcrypt.compare(password, user.password);
 
             if (!valid) {
-                return res.status(401).json({ message: "Invalid credentials" });
+                return res.status(401).json({ message: "Invalid username or password" });
             }
 
 
