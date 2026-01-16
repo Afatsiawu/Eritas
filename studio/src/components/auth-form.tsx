@@ -86,6 +86,18 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
+
+      // Update User Context with data from form
+      const nameFromEmail = values.email.split('@')[0];
+      const displayName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+
+      loginWithGoogle({
+        uid: 'email-user-' + Date.now(),
+        displayName: displayName,
+        email: values.email,
+        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000' // Better default avatar
+      });
+
       toast({
         title: t('signInSuccessfulToastTitle'),
         description: t('signInSuccessfulToastDescription'),
@@ -100,6 +112,15 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
+
+      // Update User Context with data from form
+      loginWithGoogle({
+        uid: 'email-user-' + Date.now(),
+        displayName: `${values.firstName} ${values.lastName}`,
+        email: values.email,
+        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000'
+      });
+
       toast({
         title: t('signUpSuccessfulToastTitle'),
         description: t('signUpSuccessfulToastDescription'),
