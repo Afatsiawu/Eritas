@@ -80,6 +80,37 @@ export function ProfileSidebar() {
         localStorage.clear();
     };
 
+    const handleDeleteAccount = async () => {
+        toast({
+            title: t('accountDeletedToastTitle'),
+            description: t('accountDeletedToastDescription')
+        });
+        router.push('/');
+        localStorage.clear();
+    };
+
+    const handleNavigate = (href?: string) => {
+        if (href) {
+            router.push(href);
+        }
+    };
+
+    const handleShareTrip = () => {
+        toast({
+            variant: 'destructive',
+            title: t('noActiveTripTitle'),
+            description: t('noActiveTripDescription'),
+        });
+    };
+
+    const handleMenuClick = (item: (typeof menuItems)[0]) => {
+        if (item.id === 'share') {
+            handleShareTrip();
+        } else if (item.href) {
+            handleNavigate(item.href);
+        }
+    }
+
     return (
         <>
             <Sheet>
