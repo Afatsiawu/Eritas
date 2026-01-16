@@ -531,7 +531,8 @@ export default function HomePage() {
                                 <div>
                                     <h3 className="text-sm font-semibold text-foreground/80 mb-2">{t('busFares')}:</h3>
                                     <Accordion type="single" collapsible className="w-full">
-                                        {[...displayedBus.stops, { ...displayedBus.finalDestination, isFinal: true }].map((stop, index) => {
+                                        {[...displayedBus.stops, { ...displayedBus.finalDestination, isFinal: true }].map((item, index) => {
+                                            const stop = item as StopInfo & { isFinal?: boolean };
                                             let fare = stop.fare;
 
                                             return (
