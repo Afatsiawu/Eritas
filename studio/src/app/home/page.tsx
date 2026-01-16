@@ -3,26 +3,26 @@
 
 import Image from 'next/image';
 import {
-  ArrowRight,
-  BusFront,
-  MapPin,
-  Search,
-  X,
-  Flag,
-  Users,
-  Loader2,
-  Clock,
-  Armchair,
-  QrCode,
-  Bell,
-  Trash2,
-  Ticket,
-  LogIn,
-  Bus,
-  UserCircle,
-  Send,
-  ArrowUpRight,
-  Footprints,
+    ArrowRight,
+    BusFront,
+    MapPin,
+    Search,
+    X,
+    Flag,
+    Users,
+    Loader2,
+    Clock,
+    Armchair,
+    QrCode,
+    Bell,
+    Trash2,
+    Ticket,
+    LogIn,
+    Bus,
+    UserCircle,
+    Send,
+    ArrowUpRight,
+    Footprints,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -45,15 +45,15 @@ import { Map } from '@/components/map';
 import { useLanguage } from '@/context/language-context';
 import { cn } from '@/lib/utils';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useBusArrivalNotification } from '@/hooks/use-bus-arrival-notification';
 import { TripRating } from '@/components/trip-rating';
@@ -63,38 +63,38 @@ import { useTrip } from '@/context/trip-context';
 
 const initialBusData = [
     {
-      id: 'bus-1',
-      driver: 'Kofi Mensah',
-      plate: 'GT 4589-23',
-      eta: 1,
-      capacity: { current: 35, max: 52 },
-      stops: [
-        { name: 'Adenta', fare: 5.00, eta: 5 },
-        { name: 'Madina', fare: 7.50, eta: 15 },
-      ],
-      finalDestination: { name: 'Atomic Junction', fare: 10.00, eta: 25 },
-      position: { top: '45%', left: '25%' },
-      driverImage: PlaceHolderImages.find((p) => p.id === 'user-avatar')?.imageUrl,
-      seating: [
-        { id: '1A', isOccupied: false }, { id: '2A', isOccupied: true }, { id: '3A', isOccupied: false }, { id: '4A', isOccupied: false },
-        { id: '1B', isOccupied: false }, { id: '1C', isOccupied: true }, { id: '2B', isOccupied: false }, { id: '2C', isOccupied: true },
-        { id: '3B', isOccupied: true }, { id: '3C', isOccupied: false }, { id: '4B', isOccupied: false }, { id: '4C', isOccupied: false },
-      ].concat(Array.from({ length: 13 }, (_, i) => ({ id: `5${String.fromCharCode(65 + i)}`, isOccupied: Math.random() > 0.5 })))
+        id: 'bus-1',
+        driver: 'Kofi Mensah',
+        plate: 'GT 4589-23',
+        eta: 1,
+        capacity: { current: 35, max: 52 },
+        stops: [
+            { name: 'Adenta', fare: 5.00, eta: 5 },
+            { name: 'Madina', fare: 7.50, eta: 15 },
+        ],
+        finalDestination: { name: 'Atomic Junction', fare: 10.00, eta: 25 },
+        position: { top: '45%', left: '25%' },
+        driverImage: PlaceHolderImages.find((p) => p.id === 'user-avatar')?.imageUrl,
+        seating: [
+            { id: '1A', isOccupied: false }, { id: '2A', isOccupied: true }, { id: '3A', isOccupied: false }, { id: '4A', isOccupied: false },
+            { id: '1B', isOccupied: false }, { id: '1C', isOccupied: true }, { id: '2B', isOccupied: false }, { id: '2C', isOccupied: true },
+            { id: '3B', isOccupied: true }, { id: '3C', isOccupied: false }, { id: '4B', isOccupied: false }, { id: '4C', isOccupied: false },
+        ].concat(Array.from({ length: 13 }, (_, i) => ({ id: `5${String.fromCharCode(65 + i)}`, isOccupied: Math.random() > 0.5 })))
     },
     {
-      id: 'bus-2',
-      driver: 'Ama Serwaa',
-      plate: 'AS 1234-24',
-      eta: 25,
-      capacity: { current: 48, max: 48 },
-      stops: [
-        { name: 'Circle', fare: 6.00, eta: 10 },
-        { name: 'Kaneshie', fare: 8.50, eta: 20 },
-      ],
-      finalDestination: { name: 'Mallam', fare: 12.00, eta: 30 },
-      position: { top: '55%', left: '65%' },
-      driverImage: PlaceHolderImages.find((p) => p.id === 'user-avatar')?.imageUrl,
-      seating: Array.from({ length: 25 }, (_, i) => ({ id: `${Math.floor(i/5)+1}${String.fromCharCode(65 + (i % 5 > 1 ? i%5-1 : i%5))}`, isOccupied: true }))
+        id: 'bus-2',
+        driver: 'Ama Serwaa',
+        plate: 'AS 1234-24',
+        eta: 25,
+        capacity: { current: 48, max: 48 },
+        stops: [
+            { name: 'Circle', fare: 6.00, eta: 10 },
+            { name: 'Kaneshie', fare: 8.50, eta: 20 },
+        ],
+        finalDestination: { name: 'Mallam', fare: 12.00, eta: 30 },
+        position: { top: '55%', left: '65%' },
+        driverImage: PlaceHolderImages.find((p) => p.id === 'user-avatar')?.imageUrl,
+        seating: Array.from({ length: 25 }, (_, i) => ({ id: `${Math.floor(i / 5) + 1}${String.fromCharCode(65 + (i % 5 > 1 ? i % 5 - 1 : i % 5))}`, isOccupied: true }))
     },
 ];
 
@@ -104,555 +104,550 @@ type PassedBusInfo = {
     nextStop: StopInfo;
     walkingTime: number;
 };
-// Mock user for DB-less experience
-const mockUser = {
-    uid: 'mock-user-id',
-    displayName: 'Eritas User',
-    email: 'user@eritas.app'
-}
+import { useUser } from '@/context/user-context';
 
 export default function HomePage() {
-  const router = useRouter();
-  const user = mockUser; // Use mock user
-  const { toast } = useToast();
-  const { t } = useLanguage();
-  const { balance, addTransaction, isHydrated: isWalletHydrated } = useWallet();
-  const { notifications, addNotification, clearNotifications } = useNotification();
-  const { activeTrip, tripStatus, currentEta, startTrip, endTrip, submitRating, cancelTrip, isHydrated: isTripHydrated } = useTrip();
-  
-  const [fromLocation, setFromLocation] = useState('Your Current Location');
-  const [toLocation, setToLocation] = useState('');
-  
-  const [buses, setBuses] = useState(initialBusData);
-  const [isLoadingBuses, setIsLoadingBuses] = useState(true);
+    const router = useRouter();
+    const { user } = useUser();
+    const { toast } = useToast();
+    const { t } = useLanguage();
+    const { balance, addTransaction, isHydrated: isWalletHydrated } = useWallet();
+    const { notifications, addNotification, clearNotifications } = useNotification();
+    const { activeTrip, tripStatus, currentEta, startTrip, endTrip, submitRating, cancelTrip, isHydrated: isTripHydrated } = useTrip();
 
-  const [selectedBus, setSelectedBus] = useState<BusData | null>(null);
-  const [isBoarding, setIsBoarding] = useState(false);
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [isSeatSheetOpen, setIsSeatSheetOpen] = useState(false);
-  const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [passedBusInfo, setPassedBusInfo] = useState<PassedBusInfo | null>(null);
-  const [isBusArriving, setIsBusArriving] = useState(false);
+    const [fromLocation, setFromLocation] = useState('Your Current Location');
+    const [toLocation, setToLocation] = useState('');
 
-  const busHasArrived = tripStatus === 'bus_arrived';
-  useBusArrivalNotification(busHasArrived);
-  
-  useEffect(() => {
-    // Simulate loading buses
-    setTimeout(() => setIsLoadingBuses(false), 500);
-  }, []);
+    const [buses, setBuses] = useState(initialBusData);
+    const [isLoadingBuses, setIsLoadingBuses] = useState(true);
 
-  const handleSearch = () => {
-    router.push(`/search?from=${encodeURIComponent(fromLocation)}&to=${encodeURIComponent(toLocation)}`);
-  };
+    const [selectedBus, setSelectedBus] = useState<BusData | null>(null);
+    const [isBoarding, setIsBoarding] = useState(false);
+    const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+    const [isSeatSheetOpen, setIsSeatSheetOpen] = useState(false);
+    const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
+    const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+    const [passedBusInfo, setPassedBusInfo] = useState<PassedBusInfo | null>(null);
+    const [isBusArriving, setIsBusArriving] = useState(false);
 
-  const handleBusSelect = (bus: BusData) => {
-    if (activeTrip) return;
-    setSelectedBus(bus);
-    setSelectedSeats([]); 
-    setPassedBusInfo(null); // Reset passed bus info
+    const busHasArrived = tripStatus === 'bus_arrived';
+    useBusArrivalNotification(busHasArrived);
 
-    // Check if the bus has already passed
-    if (bus.eta <= 0 && bus.stops.length > 0) {
-        const nextStop = bus.stops[0]; // Simple logic: suggest the first stop
-        const walkingTime = 5 + Math.floor(Math.random() * 10); // Mock walking time: 5-15 mins
-        setPassedBusInfo({ nextStop, walkingTime });
-    }
-  }
-  
-  const clearSelectedBus = () => {
-    setSelectedBus(null);
-    setSelectedSeats([]);
-    setPassedBusInfo(null);
-  }
+    useEffect(() => {
+        // Simulate loading buses
+        setTimeout(() => setIsLoadingBuses(false), 500);
+    }, []);
 
-  const handleBoard = async (bus: BusData, stop: StopInfo) => {
-    if (selectedSeats.length === 0 || !isWalletHydrated) return;
+    const handleSearch = () => {
+        router.push(`/search?from=${encodeURIComponent(fromLocation)}&to=${encodeURIComponent(toLocation)}`);
+    };
 
-    const totalFare = stop.fare * selectedSeats.length;
+    const handleBusSelect = (bus: BusData) => {
+        if (activeTrip) return;
+        setSelectedBus(bus);
+        setSelectedSeats([]);
+        setPassedBusInfo(null); // Reset passed bus info
 
-    if (balance < totalFare) {
-        toast({
-            variant: "destructive",
-            title: t('insufficientBalanceToastTitle'),
-            description: t('insufficientBalanceToastDescription'),
-        });
-        return;
+        // Check if the bus has already passed
+        if (bus.eta <= 0 && bus.stops.length > 0) {
+            const nextStop = bus.stops[0]; // Simple logic: suggest the first stop
+            const walkingTime = 5 + Math.floor(Math.random() * 10); // Mock walking time: 5-15 mins
+            setPassedBusInfo({ nextStop, walkingTime });
+        }
     }
 
-    setIsBoarding(true);
-    
-    // Simulate API call and local state update
-    setTimeout(() => {
-        addTransaction({
-            type: 'payment',
-            amount: -totalFare,
-            description: `Bus ticket to ${bus.finalDestination.name}`,
-            plate: bus.plate,
-        });
+    const clearSelectedBus = () => {
+        setSelectedBus(null);
+        setSelectedSeats([]);
+        setPassedBusInfo(null);
+    }
 
-        const tripId = uuidv4();
-        const primarySeat = selectedSeats[0];
-        const qrData = { tripId: tripId, bus: bus.plate, seat: primarySeat, from: stop.name, to: bus.finalDestination.name, fare: totalFare / selectedSeats.length, timestamp: new Date().toISOString() };
-        const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
-        const newQrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedQrData}`;
-        setQrCodeUrl(newQrCodeUrl);
-        
-        let toastDescription = `The fare of GHS ${totalFare.toFixed(2)} has been deducted.`;
+    const handleBoard = async (bus: BusData, stop: StopInfo) => {
+        if (selectedSeats.length === 0 || !isWalletHydrated) return;
 
-        toast({
-            title: "Seat Booked!",
-            description: toastDescription,
-            action: (<Button variant="outline" size="sm" onClick={() => setIsQrSheetOpen(true)}><QrCode className="mr-2 h-4 w-4" />View QR Code</Button>)
-        });
-        
-        startTrip({
-            bus: bus,
-            boardingStop: stop,
-            seats: selectedSeats,
-            tripId: tripId,
-        });
+        const totalFare = stop.fare * selectedSeats.length;
 
-         addNotification({
-            title: "Your Boarding Pass",
-            description: `Show this QR code to the driver for verification. (${bus.plate} - Seat: ${primarySeat})`,
-            tripId: tripId,
-            action: (
-                <div className="mt-2 flex justify-center">
-                    <Image src={newQrCodeUrl} alt="Boarding QR Code" width={150} height={150} />
-                </div>
-            )
-        });
+        if (balance < totalFare) {
+            toast({
+                variant: "destructive",
+                title: t('insufficientBalanceToastTitle'),
+                description: t('insufficientBalanceToastDescription'),
+            });
+            return;
+        }
 
-        if (selectedSeats.length > 1) {
+        setIsBoarding(true);
+
+        // Simulate API call and local state update
+        setTimeout(() => {
+            addTransaction({
+                type: 'payment',
+                amount: -totalFare,
+                description: `Bus ticket to ${bus.finalDestination.name}`,
+                plate: bus.plate,
+            });
+
+            const tripId = uuidv4();
+            const primarySeat = selectedSeats[0];
+            const qrData = { tripId: tripId, bus: bus.plate, seat: primarySeat, from: stop.name, to: bus.finalDestination.name, fare: totalFare / selectedSeats.length, timestamp: new Date().toISOString() };
+            const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
+            const newQrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedQrData}`;
+            setQrCodeUrl(newQrCodeUrl);
+
+            let toastDescription = `The fare of GHS ${totalFare.toFixed(2)} has been deducted.`;
+
+            toast({
+                title: "Seat Booked!",
+                description: toastDescription,
+                action: (<Button variant="outline" size="sm" onClick={() => setIsQrSheetOpen(true)}><QrCode className="mr-2 h-4 w-4" />View QR Code</Button>)
+            });
+
+            startTrip({
+                bus: bus,
+                boardingStop: stop,
+                seats: selectedSeats,
+                tripId: tripId,
+            });
+
             addNotification({
-                title: "Seats Reserved for Others",
-                description: "You have reserved multiple seats. You can share the trip details with the recipients.",
+                title: "Your Boarding Pass",
+                description: `Show this QR code to the driver for verification. (${bus.plate} - Seat: ${primarySeat})`,
+                tripId: tripId,
                 action: (
-                    <Button variant="default" size="sm" onClick={() => router.push('/share-trip')}>
-                        <Send className="mr-2 h-4 w-4" />
-                        Send to Recipient
-                    </Button>
+                    <div className="mt-2 flex justify-center">
+                        <Image src={newQrCodeUrl} alt="Boarding QR Code" width={150} height={150} />
+                    </div>
                 )
             });
+
+            if (selectedSeats.length > 1) {
+                addNotification({
+                    title: "Seats Reserved for Others",
+                    description: "You have reserved multiple seats. You can share the trip details with the recipients.",
+                    action: (
+                        <Button variant="default" size="sm" onClick={() => router.push('/share-trip')}>
+                            <Send className="mr-2 h-4 w-4" />
+                            Send to Recipient
+                        </Button>
+                    )
+                });
+            }
+
+            setIsBoarding(false);
+            clearSelectedBus();
+        }, 1500);
+    }
+
+    const handleSeatSelect = (seatId: string) => {
+        if (selectedBus) {
+            const seat = selectedBus.seating.find(s => s?.id === seatId);
+            if (seat && !seat.isOccupied) {
+                setSelectedSeats(prevSeats => {
+                    if (prevSeats.includes(seatId)) {
+                        return prevSeats.filter(s => s !== seatId);
+                    } else {
+                        return [...prevSeats, seatId];
+                    }
+                });
+            }
         }
-    
-        setIsBoarding(false);
-        clearSelectedBus();
-    }, 1500);
-  }
-  
-  const handleSeatSelect = (seatId: string) => {
-    if (selectedBus) {
-        const seat = selectedBus.seating.find(s => s?.id === seatId);
-        if (seat && !seat.isOccupied) {
-            setSelectedSeats(prevSeats => {
-                if (prevSeats.includes(seatId)) {
-                    return prevSeats.filter(s => s !== seatId);
-                } else {
-                    return [...prevSeats, seatId];
-                }
+    }
+
+    const handleConfirmSeat = () => {
+        setIsSeatSheetOpen(false);
+    }
+
+    const handleTripRatingSubmit = (rating: number, complaint?: string) => {
+        // Here you would typically send the rating to your backend
+        toast({
+            title: "Rating Submitted",
+            description: "Thank you for your feedback!",
+        });
+        submitRating();
+    };
+
+    const handleCancelTrip = () => {
+        const { fare, seats } = cancelTrip();
+        if (fare > 0) {
+            addTransaction({
+                type: 'top-up', // Refund is a form of top-up
+                amount: fare,
+                description: 'Trip cancellation refund',
+            });
+            toast({
+                title: t('tripCancelled'),
+                description: t('tripCancelledDescription', { fare: fare.toFixed(2) }),
             });
         }
+    };
+
+    const displayedBus = selectedBus;
+    const primarySeat = (Array.isArray(selectedSeats) && selectedSeats.length > 0 ? selectedSeats[0] : null);
+
+    const allStops = displayedBus ? [...displayedBus.stops, displayedBus.finalDestination] : [];
+
+    if ((isLoadingBuses && !buses) || !isTripHydrated) {
+        return (
+            <div className="flex flex-col min-h-screen bg-background items-center justify-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
     }
-  }
-  
-  const handleConfirmSeat = () => {
-    setIsSeatSheetOpen(false);
-  }
-  
-  const handleTripRatingSubmit = (rating: number, complaint?: string) => {
-      // Here you would typically send the rating to your backend
-      toast({
-          title: "Rating Submitted",
-          description: "Thank you for your feedback!",
-      });
-      submitRating();
-  };
 
-  const handleCancelTrip = () => {
-    const { fare, seats } = cancelTrip();
-    if (fare > 0) {
-      addTransaction({
-        type: 'top-up', // Refund is a form of top-up
-        amount: fare,
-        description: 'Trip cancellation refund',
-      });
-      toast({
-        title: t('tripCancelled'),
-        description: t('tripCancelledDescription', { fare: fare.toFixed(2) }),
-      });
+    if (isTripHydrated && tripStatus === 'rating' && activeTrip) {
+        return (
+            <div className="flex flex-col min-h-screen bg-background items-center justify-center p-4">
+                <TripRating trip={activeTrip} onSubmit={handleTripRatingSubmit} />
+            </div>
+        )
     }
-  };
 
-  const displayedBus = selectedBus;
-  const primarySeat = (Array.isArray(selectedSeats) && selectedSeats.length > 0 ? selectedSeats[0] : null);
+    return (
+        <div className="relative flex flex-col min-h-screen w-full bg-background font-sans overflow-hidden">
+            <div className="flex-grow h-full w-full">
+                <Map />
+                <div className="absolute inset-0 bg-background/20 pointer-events-none" />
+            </div>
 
-  const allStops = displayedBus ? [...displayedBus.stops, displayedBus.finalDestination] : [];
- 
-  if ((isLoadingBuses && !buses) || !isTripHydrated) {
-      return (
-        <div className="flex flex-col min-h-screen bg-background items-center justify-center">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-    );
-  }
-  
-  if (isTripHydrated && tripStatus === 'rating' && activeTrip) {
-      return (
-        <div className="flex flex-col min-h-screen bg-background items-center justify-center p-4">
-            <TripRating trip={activeTrip} onSubmit={handleTripRatingSubmit} />
-        </div>
-      )
-  }
+            <header className="absolute top-0 left-0 right-0 py-2 px-4 flex justify-between items-center z-20">
+                <Image
+                    src="https://i.postimg.cc/htqrt1Dn/Screenshot-2025-11-06-192038-removebg-preview-(1).png"
+                    alt="Eritas Transport Company Logo"
+                    width={120}
+                    height={60}
+                    priority
+                    className="object-contain"
+                />
+                <div className="flex items-center gap-2">
+                    <ProfileSidebar />
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button
+                                variant="default"
+                                size="icon"
+                                className="bg-background/75 backdrop-blur-sm rounded-full shadow-md hover:bg-card text-foreground"
+                            >
+                                <Bell className="h-5 w-5" />
+                                {notifications.length > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                                        <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", "bg-primary")}></span>
+                                        <span className={cn("relative inline-flex rounded-full h-4 w-4 text-primary-foreground text-xs items-center justify-center", "bg-primary")}>
+                                            {notifications.length}
+                                        </span>
+                                    </span>
+                                )}
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                                <SheetTitle>{t('notifications')}</SheetTitle>
+                            </SheetHeader>
+                            <div className="py-4 h-full flex flex-col">
+                                {notifications.length > 0 ? (
+                                    <>
+                                        <div className="flex-grow space-y-4 overflow-y-auto no-scrollbar">
+                                            {notifications.map(notification => (
+                                                <Card key={notification.id} className={cn(notification.id === -1 && "bg-destructive/10 border-destructive")}>
+                                                    <CardContent className='p-4 space-y-2'>
+                                                        <h3 className="font-semibold">{notification.title}</h3>
+                                                        <p className="text-sm text-muted-foreground">{notification.description}</p>
+                                                        {notification.action && <div className='pt-2'>{notification.action}</div>}
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="outline" className="mt-4">
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    {t('clearAll')}
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>{t('clearNotificationsTitle')}</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        {t('clearNotificationsDescription')}
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={clearNotifications}
+                                                    >
+                                                        {t('confirmClear')}
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center text-center h-full text-muted-foreground">
+                                        <Bell className="h-12 w-12 mb-4" />
+                                        <p>{t('noNewNotifications')}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                </div>
+            </header>
 
-  return (
-    <div className="relative flex flex-col min-h-screen w-full bg-background font-sans overflow-hidden">
-        <div className="flex-grow h-full w-full">
-            <Map />
-            <div className="absolute inset-0 bg-background/20 pointer-events-none" />
-        </div>
-      
-      <header className="absolute top-0 left-0 right-0 py-2 px-4 flex justify-between items-center z-20">
-        <Image
-            src="https://i.postimg.cc/htqrt1Dn/Screenshot-2025-11-06-192038-removebg-preview-(1).png"
-            alt="Eritas Transport Company Logo"
-            width={120}
-            height={60}
-            priority
-            className="object-contain"
-        />
-        <div className="flex items-center gap-2">
-            <ProfileSidebar />
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button
-                        variant="default"
-                        size="icon"
-                        className="bg-background/75 backdrop-blur-sm rounded-full shadow-md hover:bg-card text-foreground"
-                    >
-                        <Bell className="h-5 w-5" />
-                        {notifications.length > 0 && (
-                            <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                                <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", "bg-primary")}></span>
-                                <span className={cn("relative inline-flex rounded-full h-4 w-4 text-primary-foreground text-xs items-center justify-center", "bg-primary")}>
-                                    {notifications.length}
-                                </span>
-                            </span>
-                        )}
-                    </Button>
-                </SheetTrigger>
-                <SheetContent>
-                    <SheetHeader>
-                        <SheetTitle>{t('notifications')}</SheetTitle>
-                    </SheetHeader>
-                    <div className="py-4 h-full flex flex-col">
-                        {notifications.length > 0 ? (
-                            <>
-                                <div className="flex-grow space-y-4 overflow-y-auto no-scrollbar">
-                                    {notifications.map(notification => (
-                                        <Card key={notification.id} className={cn(notification.id === -1 && "bg-destructive/10 border-destructive")}>
-                                            <CardContent className='p-4 space-y-2'>
-                                                <h3 className="font-semibold">{notification.title}</h3>
-                                                <p className="text-sm text-muted-foreground">{notification.description}</p>
-                                                {notification.action && <div className='pt-2'>{notification.action}</div>}
-                                            </CardContent>
-                                        </Card>
-                                    ))}
+            {!activeTrip && buses && buses.map((bus, index) => (
+                <div
+                    key={bus.id}
+                    className="absolute z-10 animate-float cursor-pointer"
+                    style={{
+                        top: bus.position.top,
+                        left: bus.position.left,
+                        animationDelay: `-${index * 2}s`
+                    }}
+                    onClick={() => handleBusSelect(bus)}
+                >
+                    <BusFront className="h-12 w-12 text-primary opacity-80" />
+                </div>
+            ))}
+
+            <div className="absolute top-1/3 right-1/4 animate-float [animation-delay:-2s]">
+                <MapPin className="h-12 w-12 text-red-500 opacity-70" />
+            </div>
+
+            <div className="fixed bottom-0 left-0 right-0 z-20 pointer-events-none pb-[80px]">
+                <div className="p-2 sm:p-4 pointer-events-auto">
+                    <div className="bg-background/75 backdrop-blur-sm rounded-t-2xl max-w-md mx-auto p-4 flex flex-col gap-4 shadow-lg">
+                        {activeTrip && isTripHydrated ? (
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="h-16 w-16">
+                                        {activeTrip.bus.driverImage && <AvatarImage src={activeTrip.bus.driverImage} alt={activeTrip.bus.driver} />}
+                                        <AvatarFallback>{activeTrip.bus.driver.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <h2 className="text-xl font-bold text-foreground">{activeTrip.bus.driver}</h2>
+                                        <p className="text-sm text-muted-foreground font-mono">{activeTrip.bus.plate}</p>
+                                    </div>
                                 </div>
+                                <Card className="text-center">
+                                    <CardContent className="p-4">
+                                        <p className="text-sm text-muted-foreground">
+                                            {tripStatus === 'en_route_to_pickup' && t('busArrivingAtYourLocation')}
+                                            {tripStatus === 'bus_arrived' && t('busHasArrived')}
+                                            {(tripStatus === 'en_route_to_destination' || tripStatus === 'trip_ended') && `${t('arrivingAt')} ${activeTrip.boardingStop.name}`}
+                                        </p>
+                                        <p className="text-3xl font-bold text-primary">
+                                            {currentEta > 0 ? t('minutesAbbr', { minutes: currentEta }) : tripStatus === 'bus_arrived' ? 'Now' : '...'}
+                                        </p>
+                                    </CardContent>
+                                </Card>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button variant="outline" className="mt-4">
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            {t('clearAll')}
+                                        <Button
+                                            variant="destructive"
+                                            className="w-full"
+                                            disabled={tripStatus !== 'en_route_to_pickup'}
+                                        >
+                                            <X className="mr-2 h-4 w-4" /> Cancel Trip
                                         </Button>
                                     </AlertDialogTrigger>
-                                     <AlertDialogContent>
+                                    <AlertDialogContent>
                                         <AlertDialogHeader>
-                                        <AlertDialogTitle>{t('clearNotificationsTitle')}</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {t('clearNotificationsDescription')}
-                                        </AlertDialogDescription>
+                                            <AlertDialogTitle>{t('cancelTripConfirmationTitle')}</AlertDialogTitle>
+                                            <AlertDialogDescription>{t('cancelTripConfirmationDescription')}</AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                        <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={clearNotifications}
-                                        >
-                                            {t('confirmClear')}
-                                        </AlertDialogAction>
+                                            <AlertDialogCancel>{t('goBack')}</AlertDialogCancel>
+                                            <AlertDialogAction onClick={handleCancelTrip}>{t('confirmCancellation')}</AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
-                            </>
+                            </div>
+                        ) : displayedBus ? (
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            {displayedBus.driverImage && <AvatarImage src={displayedBus.driverImage} alt={displayedBus.driver} />}
+                                            <AvatarFallback>{displayedBus.driver.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-foreground">{displayedBus.driver}</h2>
+                                            <p className="text-sm text-muted-foreground font-mono">{displayedBus.plate}</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="icon" onClick={clearSelectedBus} className="h-8 w-8 -mt-1 -mr-2">
+                                        <X className="h-5 w-5" />
+                                    </Button>
+                                </div>
+
+                                {passedBusInfo ? (
+                                    <Card className="bg-amber-50 border border-amber-200">
+                                        <CardContent className="p-4 text-sm text-amber-900 space-y-3">
+                                            <p>This bus has passed your current location. The next available stop you can board is:</p>
+                                            <div className='font-semibold text-center bg-amber-100 p-2 rounded-md'>
+                                                <p className='text-base'>{passedBusInfo.nextStop.name}</p>
+                                                <div className='flex justify-center items-center gap-4 text-xs mt-1'>
+                                                    <span className='flex items-center gap-1'><Bus className='h-3 w-3' /> Bus ETA: {passedBusInfo.nextStop.eta} min</span>
+                                                    <span className='flex items-center gap-1'><Footprints className='h-3 w-3' /> Your ETA: {passedBusInfo.walkingTime} min</span>
+                                                </div>
+                                            </div>
+                                            <Button className='w-full' onClick={() => handleBoard(displayedBus, passedBusInfo.nextStop)} disabled={selectedSeats.length === 0}>
+                                                {selectedSeats.length > 0 ? `Reserve Seat for ${passedBusInfo.nextStop.name}` : "Select a seat first"}
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                ) : (
+                                    <Sheet open={isSeatSheetOpen} onOpenChange={setIsSeatSheetOpen}>
+                                        <SheetTrigger asChild>
+                                            <Button variant="outline" className='w-full'>
+                                                <Armchair className="mr-2 h-5 w-5" />
+                                                {selectedSeats.length > 0 ? t('seatsSelected', { count: selectedSeats.length }) : t('viewSeats')}
+                                            </Button>
+                                        </SheetTrigger>
+                                        <SheetContent side="bottom" className="rounded-t-2xl">
+                                            <SheetHeader>
+                                                <SheetTitle>{t('selectYourSeat')}</SheetTitle>
+                                            </SheetHeader>
+                                            <BusSeatingChart
+                                                seating={displayedBus.seating}
+                                                selectedSeats={selectedSeats}
+                                                onSeatSelect={handleSeatSelect}
+                                                busPlate={displayedBus.plate}
+                                                onConfirm={handleConfirmSeat}
+                                            />
+                                        </SheetContent>
+                                    </Sheet>
+                                )}
+
+                                <Separator />
+
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <h3 className="text-sm font-semibold text-foreground/80 flex items-center gap-2"><Users className="h-4 w-4" />{t('busCapacity')}</h3>
+                                        <p className="text-sm font-mono text-muted-foreground">{displayedBus.capacity.current} / {displayedBus.capacity.max} {t('seats')}</p>
+                                    </div>
+                                    <Progress value={(displayedBus.capacity.current / displayedBus.capacity.max) * 100} className="h-2" />
+                                </div>
+
+                                <div>
+                                    <h3 className="text-sm font-semibold text-foreground/80 mb-2">{t('busFares')}:</h3>
+                                    <Accordion type="single" collapsible className="w-full">
+                                        {[...displayedBus.stops, { ...displayedBus.finalDestination, isFinal: true }].map((stop, index) => {
+                                            let fare = stop.fare;
+
+                                            return (
+                                                <AccordionItem value={`item-${index}`} key={index} className="border-b-0">
+                                                    <AccordionTrigger className="py-2 rounded-lg hover:bg-muted/50 px-2 data-[state=open]:bg-muted">
+                                                        <div className="flex items-center justify-between gap-3 w-full">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`h-5 w-5 rounded-full flex items-center justify-center ${stop.isFinal ? 'bg-primary/20' : 'bg-muted-foreground/20'}`}>
+                                                                    {stop.isFinal ? <Flag className="h-3 w-3 text-primary" /> : <MapPin className="h-3 w-3 text-muted-foreground" />}
+                                                                </div>
+                                                                <p className={`text-sm ${stop.isFinal ? 'font-semibold text-primary' : 'text-foreground'}`}>{stop.name} {stop.isFinal && `(${t('final')})`}</p>
+                                                            </div>
+                                                            <div className='flex items-center gap-2'>
+                                                                <p className={`font-mono text-sm ${stop.isFinal ? 'font-semibold text-primary' : 'text-foreground'}`}>{t('farePerSeat', { fare: fare.toFixed(2) })}</p>
+                                                            </div>
+                                                        </div>
+                                                    </AccordionTrigger>
+                                                    <AccordionContent>
+                                                        <div className="px-3 pt-2 pb-2 text-center">
+                                                            {passedBusInfo ? (
+                                                                <p className="text-sm text-destructive font-medium p-2 bg-destructive/10 rounded-md">This bus has passed. Please use the option above.</p>
+                                                            ) : displayedBus.capacity.current + selectedSeats.length > displayedBus.capacity.max ? (
+                                                                <p className="text-sm text-destructive font-medium p-2 bg-destructive/10 rounded-md">{t('notEnoughSeats')}</p>
+                                                            ) : (
+                                                                <Button
+                                                                    className='w-full'
+                                                                    onClick={() => handleBoard(displayedBus, stop)}
+                                                                    disabled={isBoarding || selectedSeats.length === 0}
+                                                                >
+                                                                    {isBoarding ? (
+                                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                    ) : selectedSeats.length === 0 ? (
+                                                                        t('selectBusSeatFirst')
+                                                                    ) : (
+                                                                        t('board')
+                                                                    )}
+                                                                </Button>
+                                                            )}
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            )
+                                        })}
+                                    </Accordion>
+                                </div>
+                            </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center text-center h-full text-muted-foreground">
-                                <Bell className="h-12 w-12 mb-4" />
-                                <p>{t('noNewNotifications')}</p>
+                            <>
+                                <div className='text-center'>
+                                    <h2 className="text-xl font-bold text-foreground">{t('homeGreeting', { name: user?.displayName?.split(' ')[0] || t('friend') })}</h2>
+                                    <p className="text-sm text-muted-foreground">{t('homeSubGreeting')}</p>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <div className='relative flex-1'>
+                                        <BusFront className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                        <Input
+                                            placeholder={t('from')}
+                                            className='pl-10'
+                                            value={fromLocation}
+                                            onChange={(e) => setFromLocation(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="p-2 rounded-full bg-muted">
+                                        <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                                    </div>
+                                    <div className='relative flex-1'>
+                                        <BusFront className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                        <Input
+                                            placeholder={t('to')}
+                                            className='pl-10'
+                                            value={toLocation}
+                                            onChange={(e) => setToLocation(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <Button onClick={handleSearch}>
+                                    <Search className='mr-2 h-5 w-5' />
+                                    {t('searchBuses')}
+                                </Button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="fixed bottom-0 left-0 right-0 z-10">
+                <BottomNav />
+            </div>
+
+            <Sheet open={isQrSheetOpen} onOpenChange={setIsQrSheetOpen}>
+                <SheetContent side="bottom" className="rounded-t-2xl">
+                    <SheetHeader>
+                        <SheetTitle>{t('yourBoardingPass')}</SheetTitle>
+                    </SheetHeader>
+                    <div className="p-4 flex flex-col items-center justify-center space-y-4">
+                        {qrCodeUrl ? (
+                            <Image src={qrCodeUrl} alt={t('boardingQrCode')} width={200} height={200} />
+                        ) : (
+                            <div className="h-[200px] w-[200px] flex items-center justify-center bg-muted rounded-md">
+                                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
                         )}
+                        <div className="text-center space-y-1">
+                            <p className="text-sm text-muted-foreground">{t('showQrToDriver')}</p>
+                            <div className="flex items-center gap-4 justify-center">
+                                <Badge variant="outline">{activeTrip?.bus.plate || displayedBus?.plate}</Badge>
+                                {primarySeat && <Badge>{t('seat')}: {primarySeat}</Badge>}
+                            </div>
+                        </div>
                     </div>
                 </SheetContent>
             </Sheet>
         </div>
-      </header>
-      
-       {!activeTrip && buses && buses.map((bus, index) => (
-            <div 
-                key={bus.id}
-                className="absolute z-10 animate-float cursor-pointer"
-                style={{
-                    top: bus.position.top,
-                    left: bus.position.left,
-                    animationDelay: `-${index * 2}s`
-                }}
-                onClick={() => handleBusSelect(bus)}
-            >
-                 <BusFront className="h-12 w-12 text-primary opacity-80" />
-            </div>
-        ))}
-
-        <div className="absolute top-1/3 right-1/4 animate-float [animation-delay:-2s]">
-          <MapPin className="h-12 w-12 text-red-500 opacity-70" />
-        </div>
-
-      <div className="fixed bottom-0 left-0 right-0 z-20 pointer-events-none pb-[80px]">
-        <div className="p-2 sm:p-4 pointer-events-auto">
-            <div className="bg-background/75 backdrop-blur-sm rounded-t-2xl max-w-md mx-auto p-4 flex flex-col gap-4 shadow-lg">
-                {activeTrip && isTripHydrated ? (
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-4">
-                            <Avatar className="h-16 w-16">
-                                {activeTrip.bus.driverImage && <AvatarImage src={activeTrip.bus.driverImage} alt={activeTrip.bus.driver} />}
-                                <AvatarFallback>{activeTrip.bus.driver.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <h2 className="text-xl font-bold text-foreground">{activeTrip.bus.driver}</h2>
-                                <p className="text-sm text-muted-foreground font-mono">{activeTrip.bus.plate}</p>
-                            </div>
-                        </div>
-                        <Card className="text-center">
-                            <CardContent className="p-4">
-                                <p className="text-sm text-muted-foreground">
-                                    {tripStatus === 'en_route_to_pickup' && t('busArrivingAtYourLocation')}
-                                    {tripStatus === 'bus_arrived' && t('busHasArrived')}
-                                    {(tripStatus === 'en_route_to_destination' || tripStatus === 'trip_ended') && `${t('arrivingAt')} ${activeTrip.boardingStop.name}`}
-                                </p>
-                                <p className="text-3xl font-bold text-primary">
-                                    {currentEta > 0 ? t('minutesAbbr', { minutes: currentEta }) : tripStatus === 'bus_arrived' ? 'Now' : '...'}
-                                </p>
-                            </CardContent>
-                        </Card>
-                         <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button 
-                                    variant="destructive" 
-                                    className="w-full"
-                                    disabled={tripStatus !== 'en_route_to_pickup'}
-                                >
-                                    <X className="mr-2 h-4 w-4" /> Cancel Trip
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>{t('cancelTripConfirmationTitle')}</AlertDialogTitle>
-                                    <AlertDialogDescription>{t('cancelTripConfirmationDescription')}</AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>{t('goBack')}</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleCancelTrip}>{t('confirmCancellation')}</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
-                ) : displayedBus ? (
-                <div className="space-y-3">
-                    <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-3">
-                            <Avatar>
-                                {displayedBus.driverImage && <AvatarImage src={displayedBus.driverImage} alt={displayedBus.driver} />}
-                                <AvatarFallback>{displayedBus.driver.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <h2 className="text-xl font-bold text-foreground">{displayedBus.driver}</h2>
-                                <p className="text-sm text-muted-foreground font-mono">{displayedBus.plate}</p>
-                            </div>
-                        </div>
-                        <Button variant="ghost" size="icon" onClick={clearSelectedBus} className="h-8 w-8 -mt-1 -mr-2">
-                            <X className="h-5 w-5" />
-                        </Button>
-                    </div>
-
-                    {passedBusInfo ? (
-                        <Card className="bg-amber-50 border border-amber-200">
-                            <CardContent className="p-4 text-sm text-amber-900 space-y-3">
-                                <p>This bus has passed your current location. The next available stop you can board is:</p>
-                                <div className='font-semibold text-center bg-amber-100 p-2 rounded-md'>
-                                    <p className='text-base'>{passedBusInfo.nextStop.name}</p>
-                                    <div className='flex justify-center items-center gap-4 text-xs mt-1'>
-                                        <span className='flex items-center gap-1'><Bus className='h-3 w-3' /> Bus ETA: {passedBusInfo.nextStop.eta} min</span>
-                                        <span className='flex items-center gap-1'><Footprints className='h-3 w-3' /> Your ETA: {passedBusInfo.walkingTime} min</span>
-                                    </div>
-                                </div>
-                                <Button className='w-full' onClick={() => handleBoard(displayedBus, passedBusInfo.nextStop)} disabled={selectedSeats.length === 0}>
-                                    {selectedSeats.length > 0 ? `Reserve Seat for ${passedBusInfo.nextStop.name}` : "Select a seat first"}
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        <Sheet open={isSeatSheetOpen} onOpenChange={setIsSeatSheetOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" className='w-full'>
-                                    <Armchair className="mr-2 h-5 w-5" />
-                                    {selectedSeats.length > 0 ? t('seatsSelected', { count: selectedSeats.length }) : t('viewSeats')}
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="bottom" className="rounded-t-2xl">
-                                <SheetHeader>
-                                    <SheetTitle>{t('selectYourSeat')}</SheetTitle>
-                                </SheetHeader>
-                                <BusSeatingChart 
-                                    seating={displayedBus.seating}
-                                    selectedSeats={selectedSeats}
-                                    onSeatSelect={handleSeatSelect}
-                                    busPlate={displayedBus.plate}
-                                    onConfirm={handleConfirmSeat}
-                                />
-                            </SheetContent>
-                        </Sheet>
-                    )}
-
-                    <Separator />
-
-                    <div>
-                        <div className="flex justify-between items-center mb-1">
-                            <h3 className="text-sm font-semibold text-foreground/80 flex items-center gap-2"><Users className="h-4 w-4" />{t('busCapacity')}</h3>
-                            <p className="text-sm font-mono text-muted-foreground">{displayedBus.capacity.current} / {displayedBus.capacity.max} {t('seats')}</p>
-                        </div>
-                        <Progress value={(displayedBus.capacity.current / displayedBus.capacity.max) * 100} className="h-2" />
-                    </div>
-
-                    <div>
-                        <h3 className="text-sm font-semibold text-foreground/80 mb-2">{t('busFares')}:</h3>
-                        <Accordion type="single" collapsible className="w-full">
-                            {[...displayedBus.stops, { ...displayedBus.finalDestination, isFinal: true }].map((stop, index) => {
-                                let fare = stop.fare;
-
-                                return (
-                                <AccordionItem value={`item-${index}`} key={index} className="border-b-0">
-                                    <AccordionTrigger className="py-2 rounded-lg hover:bg-muted/50 px-2 data-[state=open]:bg-muted">
-                                        <div className="flex items-center justify-between gap-3 w-full">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`h-5 w-5 rounded-full flex items-center justify-center ${stop.isFinal ? 'bg-primary/20' : 'bg-muted-foreground/20'}`}>
-                                                    {stop.isFinal ? <Flag className="h-3 w-3 text-primary" /> : <MapPin className="h-3 w-3 text-muted-foreground" />}
-                                                </div>
-                                                <p className={`text-sm ${stop.isFinal ? 'font-semibold text-primary' : 'text-foreground'}`}>{stop.name} {stop.isFinal && `(${t('final')})`}</p>
-                                            </div>
-                                            <div className='flex items-center gap-2'>
-                                                <p className={`font-mono text-sm ${stop.isFinal ? 'font-semibold text-primary' : 'text-foreground'}`}>{t('farePerSeat', { fare: fare.toFixed(2) })}</p>
-                                            </div>
-                                        </div>
-                                    </AccordionTrigger>
-                                    <AccordionContent>
-                                        <div className="px-3 pt-2 pb-2 text-center">
-                                        {passedBusInfo ? (
-                                            <p className="text-sm text-destructive font-medium p-2 bg-destructive/10 rounded-md">This bus has passed. Please use the option above.</p>
-                                        ) : displayedBus.capacity.current + selectedSeats.length > displayedBus.capacity.max ? (
-                                            <p className="text-sm text-destructive font-medium p-2 bg-destructive/10 rounded-md">{t('notEnoughSeats')}</p>
-                                        ) : (
-                                            <Button 
-                                                className='w-full' 
-                                                onClick={() => handleBoard(displayedBus, stop)} 
-                                                disabled={isBoarding || selectedSeats.length === 0}
-                                            >
-                                                {isBoarding ? (
-                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                ) : selectedSeats.length === 0 ? (
-                                                    t('selectBusSeatFirst')
-                                                ) : (
-                                                    t('board')
-                                                )}
-                                            </Button>
-                                        )}
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                                )
-                            })}
-                        </Accordion>
-                    </div>
-                </div>
-                ) : (
-                <>
-                    <div className='text-center'>
-                        <h2 className="text-xl font-bold text-foreground">{t('homeGreeting', { name: user?.displayName?.split(' ')[0] || t('friend') })}</h2>
-                        <p className="text-sm text-muted-foreground">{t('homeSubGreeting')}</p>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                        <div className='relative flex-1'>
-                            <BusFront className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input 
-                            placeholder={t('from')}
-                            className='pl-10' 
-                            value={fromLocation}
-                            onChange={(e) => setFromLocation(e.target.value)}
-                            />
-                        </div>
-                        <div className="p-2 rounded-full bg-muted">
-                            <ArrowRight className="h-5 w-5 text-muted-foreground" />
-                        </div>
-                        <div className='relative flex-1'>
-                            <BusFront className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input 
-                            placeholder={t('to')}
-                            className='pl-10'
-                            value={toLocation}
-                            onChange={(e) => setToLocation(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <Button onClick={handleSearch}>
-                        <Search className='mr-2 h-5 w-5' />
-                        {t('searchBuses')}
-                    </Button>
-                </>
-                )}
-            </div>
-        </div>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 z-10">
-        <BottomNav />
-      </div>
-
-       <Sheet open={isQrSheetOpen} onOpenChange={setIsQrSheetOpen}>
-            <SheetContent side="bottom" className="rounded-t-2xl">
-                <SheetHeader>
-                    <SheetTitle>{t('yourBoardingPass')}</SheetTitle>
-                </SheetHeader>
-                <div className="p-4 flex flex-col items-center justify-center space-y-4">
-                    {qrCodeUrl ? (
-                        <Image src={qrCodeUrl} alt={t('boardingQrCode')} width={200} height={200} />
-                    ) : (
-                        <div className="h-[200px] w-[200px] flex items-center justify-center bg-muted rounded-md">
-                            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                        </div>
-                    )}
-                    <div className="text-center space-y-1">
-                        <p className="text-sm text-muted-foreground">{t('showQrToDriver')}</p>
-                        <div className="flex items-center gap-4 justify-center">
-                            <Badge variant="outline">{activeTrip?.bus.plate || displayedBus?.plate}</Badge>
-                           {primarySeat && <Badge>{t('seat')}: {primarySeat}</Badge>}
-                        </div>
-                    </div>
-                </div>
-            </SheetContent>
-        </Sheet>
-    </div>
-  );
+    );
 }
 
-    
 
-    
+
+

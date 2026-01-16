@@ -22,42 +22,36 @@ const profileSchema = z.object({
   newPassword: z.string().min(8, 'Password must be at least 8 characters.').optional().or(z.literal('')),
   confirmPassword: z.string().optional().or(z.literal('')),
 }).refine((data) => {
-    if (data.newPassword && data.newPassword !== data.confirmPassword) {
-        return false;
-    }
-    return true;
+  if (data.newPassword && data.newPassword !== data.confirmPassword) {
+    return false;
+  }
+  return true;
 }, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
 }).refine(data => {
-    if(data.newPassword && !data.currentPassword) {
-        return false;
-    }
-    return true;
+  if (data.newPassword && !data.currentPassword) {
+    return false;
+  }
+  return true;
 }, {
-    message: "Current password is required to set a new one.",
-    path: ["currentPassword"],
+  message: "Current password is required to set a new one.",
+  path: ["currentPassword"],
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-// Mock user data for a DB-less experience
-const mockUser = {
-    uid: 'mock-user-id',
-    displayName: 'Eritas User',
-    email: 'user@eritas.app',
-    photoURL: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXNlciUyMGF2YXRhcnxlbnwwfHx8fDE3NjI2MzIyNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-};
+import { useUser } from '@/context/user-context';
 
 export default function EditProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState(mockUser);
+  const { user, setUser } = useUser();
   const { toast } = useToast();
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -68,12 +62,14 @@ export default function EditProfilePage() {
       confirmPassword: '',
     },
   });
-  
+
   useEffect(() => {
-    form.reset({
+    if (user) {
+      form.reset({
         displayName: user.displayName || '',
         email: user.email || '',
-    });
+      });
+    }
   }, [user, form]);
 
   const handleAvatarClick = () => {
@@ -85,15 +81,15 @@ export default function EditProfilePage() {
     if (!file || !user) return;
 
     setIsUploading(true);
-    
+
     // Simulate upload and get a local URL
     await new Promise(resolve => setTimeout(resolve, 1500));
     const newPhotoURL = URL.createObjectURL(file);
-    setUser(prev => ({...prev, photoURL: newPhotoURL})); // Update local mock user state
+    setUser(prev => ({ ...prev, photoURL: newPhotoURL })); // Update local mock user state
 
     toast({
-        title: "Profile Picture Updated",
-        description: "Your new profile picture has been saved.",
+      title: "Profile Picture Updated",
+      description: "Your new profile picture has been saved.",
     });
 
     setIsUploading(false);
@@ -103,23 +99,23 @@ export default function EditProfilePage() {
     setIsSubmitting(true);
     // Simulate API call
     setTimeout(() => {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
 
-        const updatedUser = {...user, displayName: data.displayName };
-        setUser(updatedUser);
+      const updatedUser = { ...user, displayName: data.displayName };
+      setUser(updatedUser);
 
+      toast({
+        title: t('profileUpdatedToastTitle'),
+        description: t('profileUpdatedToastDescription'),
+      });
+
+      if (data.newPassword) {
         toast({
-            title: t('profileUpdatedToastTitle'),
-            description: t('profileUpdatedToastDescription'),
+          title: t('passwordUpdatedToastDescription'),
         });
+      }
 
-        if (data.newPassword) {
-             toast({
-                title: t('passwordUpdatedToastDescription'),
-            });
-        }
-        
-        router.back();
+      router.back();
 
     }, 1500);
   };
@@ -150,15 +146,15 @@ export default function EditProfilePage() {
                   <UserIcon className="h-10 w-10" />
                 </AvatarFallback>
               </Avatar>
-              <input 
-                type="file" 
+              <input
+                type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="hidden"
                 accept="image/png, image/jpeg, image/gif"
               />
-              <Button 
-                size="icon" 
+              <Button
+                size="icon"
                 className='absolute bottom-0 right-0 rounded-full h-8 w-8'
                 onClick={handleAvatarClick}
                 disabled={isUploading}
@@ -167,7 +163,7 @@ export default function EditProfilePage() {
               </Button>
             </div>
           </div>
-          
+
           <Card>
             <CardContent className="p-6">
               <Form {...form}>
@@ -198,7 +194,7 @@ export default function EditProfilePage() {
                       </FormItem>
                     )}
                   />
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="currentPassword"
                     render={({ field }) => (
@@ -211,7 +207,7 @@ export default function EditProfilePage() {
                       </FormItem>
                     )}
                   />
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="newPassword"
                     render={({ field }) => (
@@ -224,7 +220,7 @@ export default function EditProfilePage() {
                       </FormItem>
                     )}
                   />
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="confirmPassword"
                     render={({ field }) => (
@@ -237,12 +233,12 @@ export default function EditProfilePage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                        <Save className="mr-2 h-4 w-4" />
+                      <Save className="mr-2 h-4 w-4" />
                     )}
                     {t('saveChanges')}
                   </Button>

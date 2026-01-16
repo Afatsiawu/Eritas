@@ -1,41 +1,47 @@
-
 'use client';
 
-import { createContext, useContext, ReactNode, useState } from 'react';
+import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 
-// This is a simplified user object for a DB-less experience
-type User = {
-    uid: string;
-    displayName: string | null;
-    email: string | null;
-    photoURL?: string;
+export type User = {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL?: string;
 };
 
 type UserContextType = {
   user: User | null;
-  // In a real app, you'd have functions like login, logout, etc.
-  // For this mock, we'll just have a static user.
+  setUser: (user: User | null) => void;
+  loginWithGoogle: (userData: User) => void;
+  logout: () => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Mock user data for a DB-less experience
-const mockUser: User = {
-    uid: 'mock-user-id',
-    displayName: 'Eritas User',
-    email: 'user@eritas.app',
-    photoURL: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXNlciUyMGF2YXRhcnxlbnwwfHx8fDE3NjI2MzIyNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-};
-
-
 export function UserProvider({ children }: { children: ReactNode }) {
-  // In this mock setup, the user is always "logged in".
-  const [user] = useState<User | null>(mockUser);
+  const [user, setUser] = useState<User | null>(null);
 
-  const value = { user };
+  // Initialize with the mock user on first load for a seamless experience
+  useEffect(() => {
+    const defaultUser: User = {
+      uid: 'mock-user-id',
+      displayName: 'Eritas User',
+      email: 'user@eritas.app',
+      photoURL: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXNlciUyMGF2YXRhcnxlbnwwfHx8fDE3NjI2MzIyNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    };
+    setUser(defaultUser);
+  }, []);
+
+  const loginWithGoogle = (userData: User) => {
+    setUser(userData);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
 
   return (
-    <UserContext.Provider value={value}>
+    <UserContext.Provider value={{ user, setUser, loginWithGoogle, logout }}>
       {children}
     </UserContext.Provider>
   );
