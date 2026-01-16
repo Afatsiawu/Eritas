@@ -46,6 +46,14 @@ type AuthFormProps = {
   onSignUpSuccess: () => void;
 };
 
+type FormValues = {
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+};
+
 export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormProps) {
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -53,7 +61,7 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
   const [isLoading, setIsLoading] = useState(false);
   const [isSocialLoading, setIsSocialLoading] = useState<null | 'google'>(null);
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(mode === 'signin' ? signInSchema : signUpSchema),
     defaultValues: {
       firstName: '',
