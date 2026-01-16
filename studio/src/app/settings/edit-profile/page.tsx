@@ -141,7 +141,7 @@ export default function EditProfilePage() {
           <div className="flex flex-col items-center justify-center mb-6">
             <div className='relative'>
               <Avatar className="h-24 w-24 border-4 border-background shadow-md">
-                {user.photoURL && <AvatarImage src={user.photoURL} alt={user.displayName || 'User'} />}
+                {user?.photoURL && <AvatarImage src={user.photoURL} alt={user?.displayName || 'User'} />}
                 <AvatarFallback>
                   <UserIcon className="h-10 w-10" />
                 </AvatarFallback>
