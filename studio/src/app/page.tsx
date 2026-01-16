@@ -15,6 +15,12 @@ export default function LoginPage() {
   const router = useRouter();
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('signin');
+  const [showSlideshow, setShowSlideshow] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const handleSignInSuccess = () => {
     router.push('/home');
