@@ -347,7 +347,7 @@ export default function HomePage() {
                                     <>
                                         <div className="flex-grow space-y-4 overflow-y-auto no-scrollbar">
                                             {notifications.map(notification => (
-                                                <Card key={notification.id} className={cn(notification.id === -1 && "bg-destructive/10 border-destructive")}>
+                                                <Card key={notification.id} className={cn(String(notification.id) === '-1' && "bg-destructive/10 border-destructive")}>
                                                     <CardContent className='p-4 space-y-2'>
                                                         <h3 className="font-semibold">{notification.title}</h3>
                                                         <p className="text-sm text-muted-foreground">{notification.description}</p>
