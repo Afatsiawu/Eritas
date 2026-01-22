@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User, UserRole } from "../entities/User";
 import * as bcrypt from "bcrypt";
+import { OAuth2Client } from "google-auth-library";
 
 export class AuthController {
     static async signup(req: Request, res: Response) {
@@ -58,6 +59,44 @@ export class AuthController {
 
         } catch (error) {
             return res.status(500).json({ message: "Error logging in", error });
+        }
+    }
+
+    static async googleLogin(req: Request, res: Response) {
+        const { email, name, picture, sub: googleId } = req.body;
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            if (!email) {
+                return res.status(400).json({ message: "Invalid Google data" });
+            }
+
+            let user = await userRepository.findOne({ where: { email } });
+
+            if (!user) {
+                // Create new user if they don't exist
+                user = new User();
+                user.email = email;
+                user.name = name || email.split('@')[0];
+                user.password = `google_${googleId}`; // Placeholder since it's OAuth
+                user.role = UserRole.PASSENGER;
+                await userRepository.save(user);
+            }
+
+            return res.json({
+                message: "Google login successful",
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
+                    name: user.name,
+                    photoURL: picture
+                }
+            });
+
+        } catch (error) {
+            console.error("Google sync error:", error);
+            return res.status(500).json({ message: "Error syncing Google user", error });
         }
     }
 }

@@ -13,32 +13,37 @@ import { NotificationProvider } from "@/context/notification-context";
 import { MusicProvider } from "@/context/music-context";
 import { SavedSongsProvider } from "@/context/saved-songs-context";
 import { SavedPlacesProvider } from "@/context/saved-places-context";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 
 export function ClientProviders({ children }: { children: ReactNode }) {
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
+
     return (
-        <UserProvider>
-            <UserPreferencesProvider>
-                <LanguageProvider>
-                    <WalletProvider>
-                        <NotificationProvider>
-                            <TripProvider>
-                                <MusicProvider>
-                                    <SavedSongsProvider>
-                                        <SavedPlacesProvider>
-                                            <NotificationSettingsProvider>
-                                                <SecuritySettingsProvider>
-                                                    {children}
-                                                </SecuritySettingsProvider>
-                                            </NotificationSettingsProvider>
-                                        </SavedPlacesProvider>
-                                    </SavedSongsProvider>
-                                </MusicProvider>
-                            </TripProvider>
-                        </NotificationProvider>
-                    </WalletProvider>
-                </LanguageProvider>
-            </UserPreferencesProvider>
-        </UserProvider>
+        <GoogleOAuthProvider clientId={googleClientId}>
+            <UserProvider>
+                <UserPreferencesProvider>
+                    <LanguageProvider>
+                        <WalletProvider>
+                            <NotificationProvider>
+                                <TripProvider>
+                                    <MusicProvider>
+                                        <SavedSongsProvider>
+                                            <SavedPlacesProvider>
+                                                <NotificationSettingsProvider>
+                                                    <SecuritySettingsProvider>
+                                                        {children}
+                                                    </SecuritySettingsProvider>
+                                                </NotificationSettingsProvider>
+                                            </SavedPlacesProvider>
+                                        </SavedSongsProvider>
+                                    </MusicProvider>
+                                </TripProvider>
+                            </NotificationProvider>
+                        </WalletProvider>
+                    </LanguageProvider>
+                </UserPreferencesProvider>
+            </UserProvider>
+        </GoogleOAuthProvider>
     );
 }

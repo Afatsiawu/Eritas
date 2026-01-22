@@ -22,8 +22,8 @@ import { Separator } from './ui/separator';
 import { useLanguage } from '@/context/language-context';
 
 import { useUser } from '@/context/user-context';
-import { GoogleAuthVisualizer } from './google-auth-visualizer';
 import { API_BASE_URL } from '@/lib/api-config';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email.'),
@@ -171,28 +171,67 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
     }
   };
 
-  // Social sign-in triggered
+  // Real Google login handler
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsSocialLoading('google');
+      try {
+        // Since we have an access token, we can get user info or send it to backend
+        // For security, usually backend verifies an idToken. 
+        // useGoogleLogin provides an access_token. Let's fetch profile via Google API
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const googleUser = await res.json();
+
+        // Sync with our backend
+        const backendRes = await fetch(`${API_BASE_URL}/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(googleUser),
+        });
+
+        const backendData = await backendRes.json();
+
+        if (!backendRes.ok) {
+          throw new Error(backendData.message || 'Failed to sync with backend');
+        }
+
+        loginWithGoogle({
+          uid: String(backendData.user.id),
+          displayName: backendData.user.name,
+          email: backendData.user.email,
+          photoURL: backendData.user.photoURL || googleUser.picture
+        });
+
+        setIsSocialLoading(null);
+        toast({
+          title: t('socialSignInToastTitle', { provider: 'Google' }),
+          description: t('welcome'),
+        });
+        onSignInSuccess();
+      } catch (error) {
+        setIsSocialLoading(null);
+        toast({
+          variant: 'destructive',
+          title: 'Google Login Error',
+          description: error instanceof Error ? error.message : 'Failed to sync Google account.',
+        });
+      }
+    },
+    onError: () => {
+      setIsSocialLoading(null);
+      toast({
+        variant: 'destructive',
+        title: 'Google Login Error',
+        description: 'Google authentication failed.',
+      });
+    }
+  });
+
   const handleSocialSignIn = (provider: 'google') => {
-    setIsSocialLoading(provider);
+    if (provider === 'google') login();
   };
-
-  const handleGoogleComplete = (userData: { displayName: string, email: string, photoURL: string }) => {
-    loginWithGoogle({
-      uid: 'google-user-id',
-      ...userData
-    });
-
-    setIsSocialLoading(null);
-    toast({
-      title: t('socialSignInToastTitle', { provider: 'Google' }),
-      description: t('welcome'),
-    });
-    onSignInSuccess();
-  };
-
-  if (isSocialLoading === 'google') {
-    return <GoogleAuthVisualizer onComplete={handleGoogleComplete} />;
-  }
 
   return (
     <>
