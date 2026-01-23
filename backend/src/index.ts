@@ -25,9 +25,23 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 app.use("/auth", authRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/admin", adminRoutes);
+
+// JSON error handler
+app.use((err: any, req: Request, res: Response, next: any) => {
+    if (err instanceof SyntaxError && 'body' in err) {
+        console.error("JSON Syntax Error:", err);
+        return res.status(400).send({ message: "Invalid JSON" });
+    }
+    next();
+});
 
 app.get("/", (req: Request, res: Response) => {
     res.send("SenatorBronxx Backend is running");

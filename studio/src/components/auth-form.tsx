@@ -185,11 +185,19 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
         const googleUser = await res.json();
 
         // Sync with our backend
+        console.log(`Syncing with backend: ${API_BASE_URL}/auth/google`);
         const backendRes = await fetch(`${API_BASE_URL}/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(googleUser),
         });
+
+        const contentType = backendRes.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await backendRes.text();
+          console.error("Backend returned non-JSON response:", text);
+          throw new Error(`Server error: Expected JSON but got ${contentType || 'nothing'}. Please check if the API URL is correct.`);
+        }
 
         const backendData = await backendRes.json();
 
