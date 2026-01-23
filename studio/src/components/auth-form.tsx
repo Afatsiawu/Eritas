@@ -196,7 +196,7 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
         if (!contentType || !contentType.includes("application/json")) {
           const text = await backendRes.text();
           console.error("Backend returned non-JSON response:", text);
-          throw new Error(`Server error: Expected JSON but got ${contentType || 'nothing'}. Please check if the API URL is correct.`);
+          throw new Error(`Server error: Expected JSON but got ${contentType || 'nothing'}. URL: ${API_BASE_URL}/auth/google. Please check if your API URL and backend are correct.`);
         }
 
         const backendData = await backendRes.json();
