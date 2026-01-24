@@ -15,7 +15,8 @@ export class SpotifyController {
             const tracks = await spotifyService.searchTracks(query);
             return res.json(tracks);
         } catch (error) {
-            return res.status(500).json({ message: "Error searching Spotify", error });
+            console.error("Spotify Search Error:", error);
+            return res.status(500).json({ message: "Error searching Spotify", error: error instanceof Error ? error.message : error });
         }
     }
 
@@ -55,7 +56,7 @@ export class SpotifyController {
         try {
             const queue = await playlistRepo.find({
                 where: { busId, played: false },
-                order: { addedAt: "ASC" }, 
+                order: { addedAt: "ASC" },
                 relations: ["requestedBy"]
             });
 
