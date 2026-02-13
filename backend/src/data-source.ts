@@ -6,6 +6,10 @@ import { User, Ride, Playlist } from "./entities";
 export const AppDataSource = new DataSource({
     type: "mongodb",
     url: process.env.MONGODB_URI,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true,
+    authSource: "admin",
     synchronize: true,
     logging: true,
     entities: [User, Ride, Playlist],
