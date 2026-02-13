@@ -27,6 +27,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 const FormSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email.' }),
   pin: z.string().length(6, { message: 'Your PIN must be 6 digits.' }),
 });
 
@@ -37,13 +38,42 @@ export default function LoginForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      email: '',
       pin: '',
     },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({ title: 'Login Successful', description: 'Redirecting to dashboard...'});
-    router.push('/dashboard');
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.pin }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast({
+          title: 'Login Failed',
+          description: result.message || 'Check your credentials.',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      // Save user session
+      localStorage.setItem('driver_session', JSON.stringify(result.user));
+
+      toast({ title: 'Login Successful', description: 'Redirecting to dashboard...' });
+      router.push('/dashboard');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Could not connect to the authentication server.',
+        variant: 'destructive'
+      });
+    }
   }
 
   return (
@@ -55,6 +85,19 @@ export default function LoginForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="driver@eritas.app" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="pin"

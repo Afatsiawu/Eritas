@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, ObjectIdColumn, ObjectId, Column, ManyToOne, CreateDateColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity()
 export class Ride {
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @ObjectIdColumn()
+    id!: ObjectId;
 
-    @ManyToOne(() => User, (user) => user.id)
-    driver!: User;
+    @Column()
+    driverId!: string;
 
     @Column()
     origin!: string;
@@ -16,7 +16,7 @@ export class Ride {
     destination!: string;
 
     @Column()
-    status!: string; 
+    status!: string;
 
     @CreateDateColumn()
     startTime!: Date;

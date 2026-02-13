@@ -43,7 +43,7 @@ export class AdminController {
     }
 
     static async createDriver(req: Request, res: Response) {
-        
+
         const { email, password, name, licenseNumber, busPlate } = req.body;
 
         try {
@@ -56,13 +56,29 @@ export class AdminController {
             driver.password = password || "driver123"; // Default or generated
             driver.name = name;
             driver.role = UserRole.DRIVER;
-           
+
 
             await userRepo.save(driver);
-            return res.status(201).json({ message: "Driver created", driver });
+            return res.status(201).json({ message: "Driver created", user: driver });
 
         } catch (error) {
             return res.status(500).json({ message: "Error creating driver", error });
+        }
+    }
+
+    static async makeAdmin(req: Request, res: Response) {
+        const { email } = req.body;
+        try {
+            const userRepo = AppDataSource.getRepository(User);
+            const user = await userRepo.findOne({ where: { email } });
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            user.role = UserRole.ADMIN || 'admin' as UserRole; // Fallback if ADMIN is not in enum yet
+            await userRepo.save(user);
+            return res.json({ message: `User ${email} is now an admin` });
+        } catch (error) {
+            return res.status(500).json({ message: "Error updating permissions", error });
         }
     }
 }

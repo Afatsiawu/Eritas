@@ -60,9 +60,9 @@ function getDistance(
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distance in km
 }
@@ -116,6 +116,7 @@ type TripContextType = {
   passengerCount: number;
   setPassengerCount: (count: number) => void;
   seatCapacity: number;
+  driver: any;
 };
 
 const TripContext = createContext<TripContextType | null>(null);
@@ -144,28 +145,36 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     playerName: 'TransitPro Player',
   });
   const [passengerCount, setPassengerCount] = useState(0);
+  const [driver, setDriver] = useState<any>(null);
   const seatCapacity = 22;
-  
+
   // Simulate the bus's current location (e.g., near Kaneshie Market)
   const busLocation = { lat: 5.555, lng: -0.245 };
 
   useEffect(() => {
+    const savedDriver = localStorage.getItem('driver_session');
+    if (savedDriver) {
+      setDriver(JSON.parse(savedDriver));
+    }
+  }, []);
+
+  useEffect(() => {
     if (tripStatus === 'In Progress') {
       // Simulate initial passenger count when trip starts
-      setPassengerCount(18); 
+      setPassengerCount(18);
     } else {
       setPassengerCount(0);
     }
   }, [tripStatus]);
-  
+
   const routeStops = useMemo(() => {
     if (selectedStops.length === 0) {
       return [];
     }
-    
+
     // The first selected stop is the destination.
     const destination = selectedStops[0];
-    
+
     // All other stops are intermediate.
     const intermediateStops = selectedStops.slice(1);
 
@@ -181,7 +190,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [selectedStops, busLocation.lat, busLocation.lng]);
 
   const isChecklistComplete = useMemo(() => checklist.every(item => item.checked), [checklist]);
-  
+
   const areDiagnosticsComplete = useMemo(() => {
     return (Object.values(diagnostics) as DiagnosticStatus[]).every(status => status === 'success');
   }, [diagnostics]);
@@ -204,9 +213,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     passengerCount,
     setPassengerCount,
     seatCapacity,
+    driver,
   };
-  
+
   const handleLogout = async () => {
+    localStorage.removeItem('driver_session');
     router.push('/');
   }
 
@@ -219,7 +230,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <div className="group-data-[collapsible=icon]:hidden">
                 <AppLogo />
               </div>
-               <BusFront className="h-7 w-7 text-primary hidden group-data-[collapsible=icon]:block" />
+              <BusFront className="h-7 w-7 text-primary hidden group-data-[collapsible=icon]:block" />
             </div>
           </SidebarHeader>
 
@@ -245,28 +256,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           <SidebarFooter className="group-data-[collapsible=icon]:p-0">
             <Separator className="my-2" />
-             <SidebarMenu>
-                 <SidebarMenuItem>
-                    <SidebarMenuButton
-                        onClick={handleLogout}
-                        tooltip="Logout"
-                        size="lg"
-                        className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
-                    >
-                        <LogOut />
-                        <span>Logout</span>
-                    </SidebarMenuButton>
-                 </SidebarMenuItem>
-             </SidebarMenu>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={handleLogout}
+                  tooltip="Logout"
+                  size="lg"
+                  className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
+                >
+                  <LogOut />
+                  <span>Logout</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
             <Separator className="mt-2 group-data-[collapsible=icon]:hidden" />
             <div className="flex items-center gap-3 p-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:py-2">
               <Avatar className="h-10 w-10">
                 {driverPhoto && <AvatarImage src={driverPhoto.imageUrl} alt="Driver" data-ai-hint={driverPhoto.imageHint} />}
-                <AvatarFallback>{'D'}</AvatarFallback>
+                <AvatarFallback>{driver?.name?.charAt(0) || 'D'}</AvatarFallback>
               </Avatar>
               <div className="group-data-[collapsible=icon]:hidden">
-                <p className="font-semibold">Driver</p>
-                <p className="text-xs text-muted-foreground">123456</p>
+                <p className="font-semibold">{driver?.name || 'Driver'}</p>
+                <p className="text-xs text-muted-foreground">{driver?.id?.slice(-6) || '---'}</p>
               </div>
             </div>
           </SidebarFooter>
@@ -284,7 +295,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             {/* Centered Logo */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-               <Image src="https://i.postimg.cc/Dz9gmQvm/Screenshot-2025-10-29-154152-removebg-preview-removebg-preview.png" alt="Header Logo" width={100} height={30} />
+              <Image src="https://i.postimg.cc/Dz9gmQvm/Screenshot-2025-10-29-154152-removebg-preview-removebg-preview.png" alt="Header Logo" width={100} height={30} />
             </div>
 
             {/* Profile Button */}
@@ -297,7 +308,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </header>
           <ScrollArea className="flex-1 h-[calc(100vh-65px)]">
             <main className="p-4 sm:p-6 lg:p-8">
-                {children}
+              {children}
             </main>
           </ScrollArea>
         </SidebarInset>

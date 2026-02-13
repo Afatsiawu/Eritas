@@ -16,51 +16,56 @@ export type WithId<T> = T & { id: string };
 export interface UseCollectionResult<T> {
   data: WithId<T>[] | null;
   isLoading: boolean;
-  error: FirestoreError | null;
+  error: Error | null;
 }
 
 export function useCollection<T = any>(
-    memoizedTargetRefOrQuery: CollectionReference<DocumentData> | Query<DocumentData> | null | undefined,
+  collection: string | null | undefined,
 ): UseCollectionResult<T> {
   type ResultItemType = WithId<T>;
   type StateDataType = ResultItemType[] | null;
 
   const [data, setData] = useState<StateDataType>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<FirestoreError | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!memoizedTargetRefOrQuery) {
+    if (!collection) {
       setData(null);
       setIsLoading(false);
       setError(null);
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-
-    const unsubscribe = onSnapshot(
-      memoizedTargetRefOrQuery,
-      (snapshot: QuerySnapshot<DocumentData>) => {
-        const results: ResultItemType[] = [];
-        for (const doc of snapshot.docs) {
-          results.push({ ...(doc.data() as T), id: doc.id });
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/mongodb?collection=${collection}`);
+        if (!response.ok) throw new Error('Failed to fetch collection');
+        const rawData = await response.json();
+        if (Array.isArray(rawData)) {
+          const results = rawData.map(item => ({ ...item, id: item._id }));
+          setData(results);
+        } else {
+          setData([]);
         }
-        setData(results);
         setError(null);
-        setIsLoading(false);
-      },
-      (err: FirestoreError) => {
+      } catch (err) {
         console.error("useCollection error:", err);
-        setError(err);
+        setError(err as Error);
         setData(null);
+      } finally {
         setIsLoading(false);
       }
-    );
+    };
 
-    return () => unsubscribe();
-  }, [memoizedTargetRefOrQuery]);
+    setIsLoading(true);
+    fetchData();
+
+    // Polling every 5 seconds
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, [collection]);
 
   return { data, isLoading, error };
 }
+

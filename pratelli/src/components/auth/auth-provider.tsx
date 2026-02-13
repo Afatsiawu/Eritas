@@ -26,6 +26,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,32 +49,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string) => {
     setLoading(true);
-    await mockApi();
-    const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-    if (!allUsers[email]) {
-      throw new Error("User not found. Please sign up first.");
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: 'password123' }), // Adjust as needed
+      });
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.message || "Login failed");
+      }
+      const result = await response.json();
+      const userData = { ...result.user, isAdmin: result.user.role === 'admin' };
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
+    } finally {
+      setLoading(false);
     }
-    const userData = { id: email, ...allUsers[email] };
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
-    setLoading(false);
   };
-  
+
   const signup = async (email: string, fullName: string) => {
-    await mockApi();
-    const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-    if (allUsers[email]) {
-      throw new Error("An account with this email already exists.");
+    const response = await fetch(`${API_URL}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name: fullName, password: 'password123', role: 'admin' }),
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.message || "Signup failed");
     }
-    const isFirstUser = Object.keys(allUsers).length === 0;
-    allUsers[email] = { email, fullName, isAdmin: isFirstUser, walletBalance: 0 };
-    localStorage.setItem('allUsers', JSON.stringify(allUsers));
   };
-  
+
   const logout = () => {
     localStorage.removeItem('user');
     setUser(null);
-    router.push('/login');
+    router.push('/');
   };
 
   const deleteAccount = async () => {

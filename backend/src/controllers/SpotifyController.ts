@@ -38,7 +38,7 @@ export class SpotifyController {
             item.spotifyUri = trackUri;
             item.trackName = trackInfo.name;
             item.artistName = trackInfo.artists.map((a: { name: string }) => a.name).join(", ");
-            item.requestedBy = user;
+            item.requestedById = user.id.toString();
 
             await playlistRepo.save(item);
 
@@ -56,8 +56,7 @@ export class SpotifyController {
         try {
             const queue = await playlistRepo.find({
                 where: { busId, played: false },
-                order: { addedAt: "ASC" },
-                relations: ["requestedBy"]
+                order: { addedAt: "ASC" }
             });
 
             return res.json(queue);
@@ -71,7 +70,7 @@ export class SpotifyController {
         const playlistRepo = AppDataSource.getRepository(Playlist);
 
         try {
-            const item = await playlistRepo.findOne({ where: { id: parseInt(id) } });
+            const item = await playlistRepo.findOne({ where: { id: id as any } });
             if (!item) return res.status(404).json({ message: "Item not found" });
 
             item.played = true;

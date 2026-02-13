@@ -10,10 +10,12 @@ import { SignupSlideshow } from '@/components/signup-slideshow';
 import { IconMosaicBackground } from '@/components/icon-mosaic-background';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLanguage } from '@/context/language-context';
+import { useUser } from '@/context/user-context';
 
 export default function LoginPage() {
   const router = useRouter();
   const { t } = useLanguage();
+  const { user, setUser } = useUser();
   const [activeTab, setActiveTab] = useState('signin');
   const [showSlideshow, setShowSlideshow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -22,15 +24,39 @@ export default function LoginPage() {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (user && user.onboarded === false) {
+      setShowSlideshow(true);
+    }
+  }, [user]);
+
   const handleSignInSuccess = () => {
-    router.push('/home');
+    // If not onboarded, the other useEffect will catch it
+    if (user && user.onboarded === true) {
+      router.push('/home');
+    }
   }
 
   const handleSignUpSuccess = () => {
     setActiveTab('signin');
   }
 
-  const handleFinishSlideshow = () => {
+  const handleFinishSlideshow = async () => {
+    if (user) {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/onboarding`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.uid }),
+        });
+
+        // Update local user state
+        setUser({ ...user, onboarded: true });
+        localStorage.setItem('studio_user', JSON.stringify({ ...user, onboarded: true }));
+      } catch (error) {
+        console.error('Failed to update onboarding status:', error);
+      }
+    }
     router.push('/home');
   }
 

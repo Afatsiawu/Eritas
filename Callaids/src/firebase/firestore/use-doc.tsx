@@ -15,48 +15,52 @@ export type WithId<T> = T & { id: string };
 export interface UseDocResult<T> {
   data: WithId<T> | null;
   isLoading: boolean;
-  error: FirestoreError | null;
+  error: Error | null;
 }
 
 export function useDoc<T = any>(
-  memoizedDocRef: DocumentReference<DocumentData> | null | undefined,
+  collection: string | null | undefined,
+  id: string | null | undefined,
 ): UseDocResult<T> {
   const [data, setData] = useState<WithId<T> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<FirestoreError | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!memoizedDocRef) {
+    if (!collection || !id) {
       setData(null);
       setIsLoading(false);
       setError(null);
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-
-    const unsubscribe = onSnapshot(
-      memoizedDocRef,
-      (snapshot: DocumentSnapshot<DocumentData>) => {
-        if (snapshot.exists()) {
-          setData({ ...(snapshot.data() as T), id: snapshot.id });
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/mongodb?collection=${collection}&id=${id}`);
+        if (!response.ok) throw new Error('Failed to fetch doc');
+        const rawData = await response.json();
+        if (rawData) {
+          setData({ ...rawData, id: rawData._id });
         } else {
           setData(null);
         }
         setError(null);
-        setIsLoading(false);
-      },
-      (err: FirestoreError) => {
+      } catch (err) {
         console.error("useDoc error:", err);
-        setError(err);
+        setError(err as Error);
         setData(null);
+      } finally {
         setIsLoading(false);
       }
-    );
+    };
 
-    return () => unsubscribe();
-  }, [memoizedDocRef]);
+    setIsLoading(true);
+    fetchData();
+
+    // Polling every 5 seconds to mimic onSnapshot
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, [collection, id]);
 
   return { data, isLoading, error };
 }

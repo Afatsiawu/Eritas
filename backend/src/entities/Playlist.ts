@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, ObjectIdColumn, ObjectId, Column, ManyToOne, CreateDateColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity()
 export class Playlist {
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @ObjectIdColumn()
+    id!: ObjectId;
 
     @Column()
-    busId!: string; 
+    busId!: string;
 
     @Column()
     spotifyUri!: string;
@@ -18,8 +18,8 @@ export class Playlist {
     @Column()
     artistName!: string;
 
-    @ManyToOne(() => User, (user) => user.id)
-    requestedBy!: User;
+    @Column()
+    requestedById!: string;
 
     @Column({ default: false })
     played!: boolean;

@@ -6,7 +6,7 @@ import { OAuth2Client } from "google-auth-library";
 
 export class AuthController {
     static async signup(req: Request, res: Response) {
-        const { email, password, role, name } = req.body;
+        const { email, password, role, name, driverLicense, ghanaCardNumber, busName, busPlate } = req.body;
         const userRepository = AppDataSource.getRepository(User);
 
         try {
@@ -25,10 +25,15 @@ export class AuthController {
 
             user.role = role || UserRole.PASSENGER;
             user.name = name;
+            user.driverLicense = driverLicense;
+            user.ghanaCardNumber = ghanaCardNumber;
+            user.busName = busName;
+            user.busPlate = busPlate;
+            user.onboarded = false;
 
             await userRepository.save(user);
 
-            return res.status(201).json({ message: "User created", userId: user.id });
+            return res.status(201).json({ message: "User created", userId: user.id.toString(), onboarded: user.onboarded });
         } catch (error) {
             return res.status(500).json({ message: "Error signing up", error });
         }
@@ -54,7 +59,17 @@ export class AuthController {
 
             return res.json({
                 message: "Login successful",
-                user: { id: user.id, email: user.email, role: user.role, name: user.name }
+                user: {
+                    id: user.id.toString(),
+                    email: user.email,
+                    role: user.role,
+                    name: user.name,
+                    driverLicense: user.driverLicense,
+                    ghanaCardNumber: user.ghanaCardNumber,
+                    busName: user.busName,
+                    busPlate: user.busPlate,
+                    onboarded: user.onboarded
+                }
             });
 
         } catch (error) {
@@ -81,23 +96,44 @@ export class AuthController {
                 user.name = name || email.split('@')[0];
                 user.password = `google_${googleId}`; // Placeholder since it's OAuth
                 user.role = UserRole.PASSENGER;
+                user.onboarded = false;
                 await userRepository.save(user);
             }
 
             return res.json({
                 message: "Google login successful",
                 user: {
-                    id: user.id,
+                    id: user.id.toString(),
                     email: user.email,
                     role: user.role,
                     name: user.name,
-                    photoURL: picture
+                    photoURL: picture,
+                    onboarded: user.onboarded
                 }
             });
 
         } catch (error) {
             console.error("Google sync error:", error);
             return res.status(500).json({ message: "Error syncing Google user", error });
+        }
+    }
+
+    static async updateOnboarding(req: Request, res: Response) {
+        const { userId } = req.body;
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            const user = await userRepository.findOne({ where: { id: userId } as any });
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            user.onboarded = true;
+            await userRepository.save(user);
+
+            return res.json({ message: "Onboarding completed" });
+        } catch (error) {
+            return res.status(500).json({ message: "Error updating onboarding status", error });
         }
     }
 }

@@ -7,6 +7,7 @@ export type User = {
   displayName: string | null;
   email: string | null;
   photoURL?: string;
+  onboarded?: boolean;
 };
 
 type UserContextType = {
@@ -21,23 +22,22 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
-  // Initialize with the mock user on first load for a seamless experience
+  // Initialize with the user from localStorage if exists
   useEffect(() => {
-    const defaultUser: User = {
-      uid: 'mock-user-id',
-      displayName: 'Eritas User',
-      email: 'user@eritas.app',
-      photoURL: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXNlciUyMGF2YXRhcnxlbnwwfHx8fDE3NjI2MzIyNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    };
-    setUser(defaultUser);
+    const savedUser = localStorage.getItem('studio_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
 
   const loginWithGoogle = (userData: User) => {
     setUser(userData);
+    localStorage.setItem('studio_user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('studio_user');
   };
 
   return (

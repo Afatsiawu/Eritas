@@ -108,7 +108,8 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
         uid: String(data.user.id),
         displayName: data.user.name || data.user.email.split('@')[0],
         email: data.user.email,
-        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000'
+        photoURL: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000',
+        onboarded: data.user.onboarded
       });
 
       setIsLoading(false);
@@ -209,7 +210,8 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
           uid: String(backendData.user.id),
           displayName: backendData.user.name,
           email: backendData.user.email,
-          photoURL: backendData.user.photoURL || googleUser.picture
+          photoURL: backendData.user.photoURL || googleUser.picture,
+          onboarded: backendData.user.onboarded
         });
 
         setIsSocialLoading(null);

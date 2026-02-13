@@ -4,10 +4,10 @@ import { User, Ride, Playlist } from "./entities";
 
 
 export const AppDataSource = new DataSource({
-    type: "sqlite",
-    database: "database.sqlite",
+    type: "mongodb",
+    url: process.env.MONGODB_URI,
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: [User, Ride, Playlist],
     migrations: [],
     subscribers: [],

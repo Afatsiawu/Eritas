@@ -1,52 +1,39 @@
-// This file mocks a backend API for demonstration purposes.
-// In a real application, these functions would make network requests to a server.
+// This file connects the Admin panel to the real backend API.
 
 import { User, Driver } from './definitions';
 
-const mockApi = (delay = 500) => new Promise(resolve => setTimeout(resolve, delay));
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 // --- User Management ---
 
 export async function listUsers(): Promise<User[]> {
-  await mockApi();
-  const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-  // Ensure each user object has an 'id' property matching its key (email) and default walletBalance
-  return Object.keys(allUsers).map(email => ({
-    id: email,
-    walletBalance: 0, // Default wallet balance if not present
-    ...allUsers[email]
-  }));
+    const response = await fetch(`${API_URL}/admin/users`);
+    if (!response.ok) throw new Error('Failed to fetch users');
+    const users = await response.json();
+    return users.map((u: any) => ({
+        ...u,
+        id: u.id.toString(), // Ensure string ID
+    }));
 }
 
 export async function makeAdmin(email: string): Promise<{ message: string }> {
-    await mockApi();
-    const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-    if (!allUsers[email]) {
-        throw new Error(`User with email ${email} not found.`);
+    const response = await fetch(`${API_URL}/admin/make-admin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+    });
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update admin permissions');
     }
-    if (allUsers[email].isAdmin) {
-        return { message: `${email} is already an admin.` };
-    }
-    allUsers[email].isAdmin = true;
-    localStorage.setItem('allUsers', JSON.stringify(allUsers));
-
-    // also update current user if they are the one being made admin
-    const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-    if(currentUser && currentUser.email === email) {
-        currentUser.isAdmin = true;
-        localStorage.setItem('user', JSON.stringify(currentUser));
-    }
-
-    return { message: `Successfully made ${email} an admin.` };
+    return response.json();
 }
 
 export async function deleteUser({ userId }: { userId: string }): Promise<{ success: boolean }> {
-    await mockApi();
-    const allUsers = JSON.parse(localStorage.getItem('allUsers') || '{}');
-    if (allUsers[userId]) {
-        delete allUsers[userId];
-        localStorage.setItem('allUsers', JSON.stringify(allUsers));
-    }
+    const response = await fetch(`${API_URL}/admin/users/${userId}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Failed to delete user');
     return { success: true };
 }
 
@@ -54,30 +41,32 @@ export async function deleteUser({ userId }: { userId: string }): Promise<{ succ
 // --- Driver Management ---
 
 export async function generateDriverCode(driverDetails: Omit<Driver, 'id' | 'registrationCode'>): Promise<{ registrationCode: string }> {
-    await mockApi();
-    const drivers = JSON.parse(localStorage.getItem('drivers') || '[]');
-    const registrationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const newDriver: Driver = {
-        ...driverDetails,
-        id: driverDetails.email, // using email as ID for simplicity
-        registrationCode,
-    };
-    drivers.push(newDriver);
-    localStorage.setItem('drivers', JSON.stringify(drivers));
-    return { registrationCode };
+    const response = await fetch(`${API_URL}/admin/drivers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(driverDetails),
+    });
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to create driver');
+    }
+    const result = await response.json();
+    // Assuming backend returns registrationCode or we use their ID
+    return { registrationCode: result.user.registrationCode || 'GEN-' + result.user.id.slice(-6) };
 }
 
 
 export async function listDrivers(): Promise<Driver[]> {
-    await mockApi();
-    const drivers = JSON.parse(localStorage.getItem('drivers') || '[]');
-    return drivers;
+    const response = await fetch(`${API_URL}/admin/drivers`);
+    if (!response.ok) throw new Error('Failed to fetch drivers');
+    const drivers = await response.json();
+    return drivers.map((d: any) => ({
+        ...d,
+        id: d.id.toString(),
+    }));
 }
 
 export async function deleteDriver({ driverId }: { driverId: string }): Promise<{ success: boolean }> {
-    await mockApi();
-    let drivers: Driver[] = JSON.parse(localStorage.getItem('drivers') || '[]');
-    drivers = drivers.filter(driver => driver.id !== driverId);
-    localStorage.setItem('drivers', JSON.stringify(drivers));
-    return { success: true };
+    // Backend uses same endpoint for user/driver deletion by ID
+    return deleteUser({ userId: driverId });
 }
