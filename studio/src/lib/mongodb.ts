@@ -6,6 +6,9 @@ if (!process.env.MONGODB_URI) {
 
 const uri = process.env.MONGODB_URI;
 const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true,
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
