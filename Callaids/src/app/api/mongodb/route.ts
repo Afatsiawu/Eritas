@@ -15,7 +15,10 @@ export async function GET(request: NextRequest) {
 
     try {
         const client = await clientPromise;
-        const db = client.db(); // Uses the DB name from the URI if present, otherwise specify
+        if (!client) {
+            return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+        }
+        const db = client.db();
         const collection = db.collection(collectionName);
 
         if (id) {
@@ -41,6 +44,9 @@ export async function POST(request: NextRequest) {
 
     try {
         const client = await clientPromise;
+        if (!client) {
+            return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+        }
         const db = client.db();
         const collection = db.collection(collectionName);
 

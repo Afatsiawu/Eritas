@@ -14,17 +14,16 @@ const options = {
 } as any;
 
 let client;
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient | null>;
 
 if (!uri) {
-    if (process.env.NODE_ENV === 'production') {
-        console.warn('MONGODB_URI is not defined in environment variables');
-    }
-    clientPromise = Promise.reject(new Error('MONGODB_URI is missing'));
+    // In production build, the URI might be missing. 
+    // We return a promise that resolves to null instead of rejecting.
+    clientPromise = Promise.resolve(null);
 } else {
     if (process.env.NODE_ENV === 'development') {
         let globalWithMongo = global as typeof globalThis & {
-            _mongoClientPromise?: Promise<MongoClient>;
+            _mongoClientPromise?: Promise<MongoClient | null>;
         };
 
         if (!globalWithMongo._mongoClientPromise) {
