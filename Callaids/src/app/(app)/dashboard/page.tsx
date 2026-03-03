@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTrip } from '../layout';
-import { Clock, Users, Wallet, MapPin } from 'lucide-react';
+import { Clock, Users, Wallet, MapPin, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import TripControls from '@/components/trip-controls';
@@ -11,20 +11,48 @@ import { cn } from '@/lib/utils';
 
 
 type Metric = {
-    title: string;
-    icon: React.ElementType;
-    value: string;
-    progress?: number;
-    footer: string;
+  title: string;
+  icon: React.ElementType;
+  value: string;
+  progress?: number;
+  footer: string;
+};
+
+type TripStats = {
+  daily: number;
+  weekly: number;
+  monthly: number;
+  total: number;
 };
 
 export default function DashboardPage() {
-  const { tripStatus, setTripStatus, selectedStops, setSelectedStops, routeStops, isChecklistComplete, areDiagnosticsComplete, passengerCount, seatCapacity } = useTrip();
+  const { tripStatus, setTripStatus, selectedStops, setSelectedStops, routeStops, isChecklistComplete, areDiagnosticsComplete, passengerCount, seatCapacity, driver } = useTrip();
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  
+  const [stats, setStats] = useState<TripStats | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!driver?.token) return;
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/rides/stats`, {
+          headers: {
+            'Authorization': `Bearer ${driver.token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch trip stats:", error);
+      }
+    };
+    fetchStats();
+  }, [driver]);
+
   useEffect(() => {
     const isTripActive = tripStatus === 'In Progress';
-    
+
     setMetrics([
       {
         title: 'Passenger Load',
@@ -34,19 +62,19 @@ export default function DashboardPage() {
         footer: `${seatCapacity - passengerCount} seats available`,
       },
       {
-        title: "Today's Earnings",
-        icon: Wallet,
-        value: isTripActive ? `GH₵ 150.00` : `GH₵ 0.00`,
-        footer: isTripActive ? `Based on 2 trips` : 'No trips yet today',
+        title: "Today's Trips",
+        icon: BarChart3,
+        value: stats ? `${stats.daily}` : '0',
+        footer: `Weekly: ${stats?.weekly || 0} | Monthly: ${stats?.monthly || 0}`,
       },
       {
-        title: 'Next Stop ETA',
-        icon: Clock,
-        value: isTripActive ? '6 min' : 'N/A',
-        footer: isTripActive ? 'Accra Mall' : 'Trip not started',
+        title: "Total Trips Made",
+        icon: Wallet,
+        value: stats ? `${stats.total}` : '0',
+        footer: "Total historic trips",
       },
     ]);
-  }, [tripStatus, passengerCount, seatCapacity]);
+  }, [tripStatus, passengerCount, seatCapacity, stats]);
 
 
   const handleStopsChange = (stop: Stop, isChecked: boolean) => {
@@ -56,24 +84,24 @@ export default function DashboardPage() {
         : selectedStops.filter((s) => s.id !== stop.id)
     );
   };
-  
+
   const isTripActive = tripStatus === 'In Progress' && selectedStops.length > 0;
-  
+
   const canStartTrip = isChecklistComplete && areDiagnosticsComplete && selectedStops.length > 0;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <h1 className="text-3xl font-bold font-headline">Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, John. Here's your overview.</p>
+          <h1 className="text-3xl font-bold font-headline">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome back, John. Here's your overview.</p>
         </div>
         <div className="md:w-auto w-full">
-            <TripControls 
-                status={tripStatus} 
-                setStatus={setTripStatus} 
-                startDisabled={!canStartTrip}
-            />
+          <TripControls
+            status={tripStatus}
+            setStatus={setTripStatus}
+            startDisabled={!canStartTrip}
+          />
         </div>
       </div>
 
@@ -95,10 +123,10 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         )) : (
-            // Skeleton loaders
-            Array.from({length: 3}).map((_, i) => (
-                <Card key={i}><CardHeader><CardTitle>Loading...</CardTitle></CardHeader><CardContent><Progress/></CardContent></Card>
-            ))
+          // Skeleton loaders
+          Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}><CardHeader><CardTitle>Loading...</CardTitle></CardHeader><CardContent><Progress /></CardContent></Card>
+          ))
         )}
       </div>
 
@@ -106,37 +134,37 @@ export default function DashboardPage() {
         <Card className={cn("transition-all duration-300", !isTripActive && "bg-card/50")}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Current Route Details
+              <MapPin className="h-5 w-5" />
+              Current Route Details
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {isTripActive ? (
-                <>
-                    <div className="flex justify-between items-center p-3 rounded-lg bg-secondary">
-                        <span className="font-semibold text-primary">Final Destination</span>
-                        <span className="font-bold">{routeStops[routeStops.length - 1]?.label}</span>
-                    </div>
-                    <div>
-                        <h4 className="font-medium mb-2">Upcoming Stops</h4>
-                        <ul className="space-y-2 text-sm text-muted-foreground list-disc list-inside">
-                           {routeStops.slice(0, -1).map(stop => <li key={stop.id}>{stop.label}</li>).slice(0,3) }
-                           {routeStops.length - 1 > 3 && <li>...and {routeStops.length - 4} more.</li>}
-                           {routeStops.length <= 1 && <li>No intermediate stops selected.</li>}
-                        </ul>
-                    </div>
-                </>
-            ) : (
-                <div className="text-center text-muted-foreground py-10">
-                    <p>Select stops and start a trip to see route details.</p>
+              <>
+                <div className="flex justify-between items-center p-3 rounded-lg bg-secondary">
+                  <span className="font-semibold text-primary">Final Destination</span>
+                  <span className="font-bold">{routeStops[routeStops.length - 1]?.label}</span>
                 </div>
+                <div>
+                  <h4 className="font-medium mb-2">Upcoming Stops</h4>
+                  <ul className="space-y-2 text-sm text-muted-foreground list-disc list-inside">
+                    {routeStops.slice(0, -1).map(stop => <li key={stop.id}>{stop.label}</li>).slice(0, 3)}
+                    {routeStops.length - 1 > 3 && <li>...and {routeStops.length - 4} more.</li>}
+                    {routeStops.length <= 1 && <li>No intermediate stops selected.</li>}
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <div className="text-center text-muted-foreground py-10">
+                <p>Select stops and start a trip to see route details.</p>
+              </div>
             )}
           </CardContent>
         </Card>
-        <StopsManagement 
-            selectedStops={selectedStops}
-            onStopsChange={handleStopsChange}
-            disabled={tripStatus === 'In Progress'}
+        <StopsManagement
+          selectedStops={selectedStops}
+          onStopsChange={handleStopsChange}
+          disabled={tripStatus === 'In Progress'}
         />
       </div>
     </div>

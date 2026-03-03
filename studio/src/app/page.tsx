@@ -26,9 +26,19 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user && user.onboarded === false) {
-      setShowSlideshow(true);
+      const justSignedUp = localStorage.getItem('just_signed_up');
+      if (justSignedUp === 'true') {
+        setShowSlideshow(true);
+      } else {
+        // If not onboarded but didn't just sign up, skip slideshow and go home
+        router.push('/home');
+      }
+    } else if (user && user.onboarded === true) {
+      // Clear flag if user is already onboarded
+      localStorage.removeItem('just_signed_up');
+      router.push('/home');
     }
-  }, [user]);
+  }, [user, router]);
 
   const handleSignInSuccess = () => {
     // If not onboarded, the other useEffect will catch it
@@ -53,6 +63,7 @@ export default function LoginPage() {
         // Update local user state
         setUser({ ...user, onboarded: true });
         localStorage.setItem('studio_user', JSON.stringify({ ...user, onboarded: true }));
+        localStorage.removeItem('just_signed_up');
       } catch (error) {
         console.error('Failed to update onboarding status:', error);
       }

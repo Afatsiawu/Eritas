@@ -3,6 +3,7 @@ import { AppDataSource } from "../data-source";
 import { User, UserRole } from "../entities/User";
 import * as bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
+import * as jwt from "jsonwebtoken";
 
 export class AuthController {
     static async signup(req: Request, res: Response) {
@@ -57,8 +58,15 @@ export class AuthController {
             }
 
 
+            const token = jwt.sign(
+                { id: user.id.toString(), role: user.role },
+                process.env.JWT_SECRET || "super_secret_eritas_key_2024",
+                { expiresIn: "7d" }
+            );
+
             return res.json({
                 message: "Login successful",
+                token,
                 user: {
                     id: user.id.toString(),
                     email: user.email,

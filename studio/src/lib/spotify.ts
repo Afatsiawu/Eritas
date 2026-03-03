@@ -29,22 +29,34 @@ export async function searchTracks(query: string, limit: number = 10): Promise<a
  * Update: I will implement a quick mock or TODO since backend only has "searchTracks".
  * Actually, let's just leave it aiming at tracks for now or update backend later.
  */
-export async function searchArtists(query: string, limit: number = 1): Promise<any[]> {
-    // TODO: Add backend support for artists
-    return [];
+export async function searchArtists(query: string, limit: number = 20): Promise<any[]> {
+    const response = await fetch(`${API_BASE_URL}/artists?query=${encodeURIComponent(query)}`);
+    if (!response.ok) {
+        throw new Error(`Failed to search Spotify artists: ${response.statusText}`);
+    }
+    return await response.json();
 }
 
 export async function getArtist(artistId: string): Promise<any> {
-    // TODO: Add backend support
-    return null;
+    const response = await fetch(`${API_BASE_URL}/artist/${artistId}`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch artist details: ${response.statusText}`);
+    }
+    return await response.json();
 }
 
 export async function getArtistAlbums(artistId: string, limit: number = 20): Promise<any[]> {
-    // TODO: Add backend support
-    return [];
+    const response = await fetch(`${API_BASE_URL}/artist/${artistId}/albums?limit=${limit}`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch artist albums: ${response.statusText}`);
+    }
+    return await response.json();
 }
 
 export async function getAlbumTracks(albumId: string, limit: number = 50): Promise<any[]> {
-    // TODO: Add backend support
-    return [];
+    const response = await fetch(`${API_BASE_URL}/album/${albumId}/tracks`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch album tracks: ${response.statusText}`);
+    }
+    return await response.json();
 }

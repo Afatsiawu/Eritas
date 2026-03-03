@@ -20,6 +20,7 @@ const io = new Server(httpServer, {
 import authRoutes from "./routes/auth";
 import spotifyRoutes from "./routes/spotify";
 import adminRoutes from "./routes/admin";
+import rideRoutes from "./routes/ride";
 
 app.use(cors());
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/admin", adminRoutes);
+app.use("/rides", rideRoutes);
 
 // JSON error handler
 app.use((err: any, req: Request, res: Response, next: any) => {

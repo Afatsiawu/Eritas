@@ -156,6 +156,7 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
       }
 
       setIsLoading(false);
+      localStorage.setItem('just_signed_up', 'true');
       toast({
         title: t('signUpSuccessfulToastTitle'),
         description: 'Account created successfully! Please log in.',
@@ -204,6 +205,10 @@ export function AuthForm({ mode, onSignInSuccess, onSignUpSuccess }: AuthFormPro
 
         if (!backendRes.ok) {
           throw new Error(backendData.message || 'Failed to sync with backend');
+        }
+
+        if (backendData.isNewUser) {
+          localStorage.setItem('just_signed_up', 'true');
         }
 
         loginWithGoogle({

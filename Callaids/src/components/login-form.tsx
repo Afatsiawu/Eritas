@@ -62,8 +62,8 @@ export default function LoginForm() {
         return;
       }
 
-      // Save user session
-      localStorage.setItem('driver_session', JSON.stringify(result.user));
+      // Save user session and token
+      localStorage.setItem('driver_session', JSON.stringify({ ...result.user, token: result.token }));
 
       toast({ title: 'Login Successful', description: 'Redirecting to dashboard...' });
       router.push('/dashboard');

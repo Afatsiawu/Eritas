@@ -20,6 +20,52 @@ export class SpotifyController {
         }
     }
 
+    static async searchArtists(req: Request, res: Response) {
+        const { query } = req.query;
+        if (!query || typeof query !== 'string') {
+            return res.status(400).json({ message: "Query is required" });
+        }
+
+        try {
+            const artists = await spotifyService.searchArtists(query);
+            return res.json(artists);
+        } catch (error) {
+            console.error("Spotify Artist Search Error:", error);
+            return res.status(500).json({ message: "Error searching artists", error: error instanceof Error ? error.message : error });
+        }
+    }
+
+    static async getArtist(req: Request, res: Response) {
+        const { id } = req.params;
+        try {
+            const artist = await spotifyService.getArtist(id);
+            return res.json(artist);
+        } catch (error) {
+            return res.status(500).json({ message: "Error fetching artist" });
+        }
+    }
+
+    static async getArtistAlbums(req: Request, res: Response) {
+        const { id } = req.params;
+        const { limit } = req.query;
+        try {
+            const albums = await spotifyService.getArtistAlbums(id, limit ? parseInt(limit as string) : 20);
+            return res.json(albums);
+        } catch (error) {
+            return res.status(500).json({ message: "Error fetching albums" });
+        }
+    }
+
+    static async getAlbumTracks(req: Request, res: Response) {
+        const { id } = req.params;
+        try {
+            const tracks = await spotifyService.getAlbumTracks(id);
+            return res.json(tracks);
+        } catch (error) {
+            return res.status(500).json({ message: "Error fetching album tracks" });
+        }
+    }
+
     static async addToQueue(req: Request, res: Response) {
         const { busId, trackUri, userId } = req.body;
 

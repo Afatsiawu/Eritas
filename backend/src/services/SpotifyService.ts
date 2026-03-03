@@ -35,6 +35,30 @@ class SpotifyService {
         return result.body.tracks?.items || [];
     }
 
+    async searchArtists(query: string) {
+        await this.ensureToken();
+        const result = await this.spotifyApi.searchArtists(query);
+        return result.body.artists?.items || [];
+    }
+
+    async getArtist(artistId: string) {
+        await this.ensureToken();
+        const result = await this.spotifyApi.getArtist(artistId);
+        return result.body;
+    }
+
+    async getArtistAlbums(artistId: string, limit: number = 20) {
+        await this.ensureToken();
+        const result = await this.spotifyApi.getArtistAlbums(artistId, { limit });
+        return result.body.items;
+    }
+
+    async getAlbumTracks(albumId: string) {
+        await this.ensureToken();
+        const result = await this.spotifyApi.getAlbumTracks(albumId);
+        return result.body.items;
+    }
+
     async getTrack(trackId: string) {
         await this.ensureToken();
         const result = await this.spotifyApi.getTrack(trackId);
