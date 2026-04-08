@@ -1,6 +1,9 @@
 {
   "name": "eritas-monorepo",
   "private": true,
+  "scripts": {
+    "build:pratelli": "npm run build --workspace=eritas-pratelli"
+  },
   "workspaces": [
     "studio",
     "pratelli",
