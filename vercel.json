@@ -1,0 +1,4 @@
+{
+  "buildCommand": "cd pratelli && npm run build",
+  "outputDirectory": "pratelli/.next"
+}
