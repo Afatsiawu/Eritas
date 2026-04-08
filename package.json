@@ -1,0 +1,10 @@
+{
+  "name": "eritas-monorepo",
+  "private": true,
+  "workspaces": [
+    "studio",
+    "pratelli",
+    "Callaids",
+    "backend"
+  ]
+}
