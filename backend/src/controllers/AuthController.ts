@@ -88,6 +88,10 @@ export class AuthController {
     static async googleLogin(req: Request, res: Response) {
         const { email, name, picture, sub: googleId } = req.body;
         console.log("Google Login Body:", req.body);
+        if (!AppDataSource.isInitialized) {
+            return res.status(503).json({ message: "Database not configured. Set DATABASE_URL on Render." });
+        }
+
         const userRepository = AppDataSource.getRepository(User);
 
         try {
