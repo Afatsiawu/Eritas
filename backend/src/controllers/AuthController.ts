@@ -122,7 +122,8 @@ export class AuthController {
 
         } catch (error) {
             console.error("Google sync error:", error);
-            return res.status(500).json({ message: "Error syncing Google user", error });
+            const message = error instanceof Error ? error.message : "Unknown error";
+            return res.status(500).json({ message: `Error syncing Google user: ${message}`, error });
         }
     }
 
