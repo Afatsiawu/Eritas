@@ -13,14 +13,14 @@ if (!SHARED_SECRET) {
     console.warn("LAST_FM_SHARED_SECRET not set in environment variables");
 }
 
-/**
- * Last.fm API wrapper service.
+/** 
+ * Last.fm API wrapper service. 
  * 
- * Endpoints used:
- * - track.search: search for tracks
- * - artist.search: search for artists
- * - artist.getTopTracks: get top tracks for an artist
- * - track.getInfo: get info for a track
+ * Endpoints used: 
+ * - track.search: search for tracks 
+ * - artist.search: search for artists 
+ * - artist.getTopTracks: get top tracks for an artist 
+ * - track.getInfo: get info for a track 
  */
 
 export class LastFmService {
