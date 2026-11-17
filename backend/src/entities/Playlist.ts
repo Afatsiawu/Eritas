@@ -3,7 +3,7 @@ import { User } from "./User";
 
 @Entity()
 export class Playlist {
-    @Column({ type: "uuid", primaryKey: true, default: "gen_random_uuid()" })
+    @Column({ type: "uuid", primary: true, default: "gen_random_uuid()" })
     id!: string;
 
     @Column()

@@ -3,7 +3,7 @@ import { DataSource } from "typeorm";
 import { User, Ride, Playlist } from "./entities";
 
 export const AppDataSource = new DataSource({
-    type: "pg",
+    type: "postgres",
     url: process.env.DATABASE_URL,
     ssl: process.env.DATABASE_SSL === "true",
     synchronize: true,

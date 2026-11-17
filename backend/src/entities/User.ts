@@ -8,7 +8,7 @@ export enum UserRole {
 
 @Entity()
 export class User {
-    @Column({ type: "uuid", primaryKey: true, default: "gen_random_uuid()" })
+    @Column({ type: "uuid", primary: true, default: "gen_random_uuid()" })
     id!: string;
 
     @Column()
