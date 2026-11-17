@@ -1,4 +1,5 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from "typeorm";
+import { randomUUID } from "crypto";
 
 export enum UserRole {
     PASSENGER = "passenger",
@@ -47,4 +48,11 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt!: Date;
+
+    @BeforeInsert()
+    setId() {
+        if (!this.id) {
+            this.id = randomUUID();
+        }
+    }
 }

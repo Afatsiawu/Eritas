@@ -1,5 +1,6 @@
-import { Entity, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, Column, ManyToOne, CreateDateColumn, BeforeInsert } from "typeorm";
 import { User } from "./User";
+import { randomUUID } from "crypto";
 
 @Entity()
 export class Ride {
@@ -23,4 +24,11 @@ export class Ride {
 
     @Column({ nullable: true })
     endTime!: Date;
+
+    @BeforeInsert()
+    setId() {
+        if (!this.id) {
+            this.id = randomUUID();
+        }
+    }
 }
