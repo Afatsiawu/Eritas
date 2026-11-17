@@ -1,4 +1,4 @@
-import { Entity, ObjectIdColumn, ObjectId, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export enum UserRole {
     PASSENGER = "passenger",
@@ -8,8 +8,8 @@ export enum UserRole {
 
 @Entity()
 export class User {
-    @ObjectIdColumn()
-    id!: ObjectId;
+    @Column({ type: "uuid", primaryKey: true, default: "gen_random_uuid()" })
+    id!: string;
 
     @Column()
     email!: string;
