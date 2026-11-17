@@ -74,12 +74,16 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 
-httpServer.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = () => {
+    httpServer.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+};
 
 if (!process.env.DATABASE_URL) {
     console.warn("DATABASE_URL is not set; skipping database initialization");
+    (AppDataSource as any).__initError = new Error("DATABASE_URL is not set");
+    startServer();
 } else {
     AppDataSource.initialize()
         .then(() => {
@@ -87,5 +91,9 @@ if (!process.env.DATABASE_URL) {
         })
         .catch((error) => {
             console.error("Database connection failed:", error);
+            (AppDataSource as any).__initError = error;
+        })
+        .finally(() => {
+            startServer();
         });
 }

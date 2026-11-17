@@ -89,7 +89,9 @@ export class AuthController {
         const { email, name, picture, sub: googleId } = req.body;
         console.log("Google Login Body:", req.body);
         if (!AppDataSource.isInitialized) {
-            return res.status(503).json({ message: "Database not configured. Set DATABASE_URL on Render." });
+            const initError = (AppDataSource as any).__initError;
+            const detail = initError instanceof Error ? initError.message : "Database is not connected";
+            return res.status(503).json({ message: `Database not connected: ${detail}` });
         }
 
         const userRepository = AppDataSource.getRepository(User);
