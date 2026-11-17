@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
+import lastfmRoutes from "./routes/lastfm";
 
 dotenv.config();
 
