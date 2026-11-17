@@ -1,10 +1,10 @@
-import { Entity, ObjectIdColumn, ObjectId, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, Column, ManyToOne, CreateDateColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity()
 export class Playlist {
-    @ObjectIdColumn()
-    id!: ObjectId;
+    @Column({ type: "uuid", primaryKey: true, default: "gen_random_uuid()" })
+    id!: string;
 
     @Column()
     busId!: string;
