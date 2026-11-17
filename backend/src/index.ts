@@ -5,7 +5,6 @@ import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
-import lastfmRoutes from "./routes/lastfm";
 
 dotenv.config();
 
@@ -22,6 +21,7 @@ import authRoutes from "./routes/auth";
 import spotifyRoutes from "./routes/spotify";
 import adminRoutes from "./routes/admin";
 import rideRoutes from "./routes/ride";
+import lastfmRoutes from "./routes/lastfm";  // ADD THIS LINE
 
 app.use(cors());
 app.use(express.json());
@@ -36,6 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/spotify", spotifyRoutes);
 app.use("/admin", adminRoutes);
 app.use("/rides", rideRoutes);
+app.use("/lastfm", lastfmRoutes);  // ADD THIS LINE
 
 // JSON error handler
 app.use((err: any, req: Request, res: Response, next: any) => {
