@@ -10,6 +10,9 @@ export const AppDataSource = new DataSource({
         : process.env.DATABASE_URL && !process.env.DATABASE_URL.includes("localhost")
           ? { rejectUnauthorized: false }
           : process.env.DATABASE_SSL === "true",
+    extra: {
+        family: 4,
+    },
     synchronize: true,
     logging: true,
     entities: [User, Ride, Playlist],
